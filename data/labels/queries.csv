@@ -1,2 +1,22 @@
 query_id,lost_location,lost_time,lost_date,category,colour
 q001,library,15:00,2026-10-20,water_bottle,black
+q002,AC1,12:20,2026-10-21,water_bottle,blue
+q003,AC2,13:05,2026-10-22,water_bottle,transparent
+q004,Yeung Kin Man,09:40,2026-10-23,umbrella,black
+q005,Li Dak Sum,18:10,2026-10-24,umbrella,red
+q006,Run Run Shaw,11:15,2026-10-27,key,grey
+q007,Lau Ming Wai,16:45,2026-10-28,key,black
+q008,library,20:30,2026-10-29,phone,black
+q009,AC3,12:50,2026-10-30,phone,white
+q010,student residence,08:15,2026-11-02,phone,blue
+q011,Yeung Kin Man,14:10,2026-11-02,computer,grey
+q012,library,19:20,2026-11-03,computer,black
+q013,Li Dak Sum,10:05,2026-11-03,charging_cable,white
+q014,AC1,15:40,2026-11-03,charging_cable,black
+q015,Run Run Shaw,13:25,2026-11-01,earphones,white
+q016,Lau Ming Wai,17:55,2026-10-31,earphones,black
+q017,AC2,11:30,2026-11-01,water_bottle,green
+q018,student residence,21:10,2026-10-26,umbrella,blue
+q019,Yeung Kin Man,08:50,2026-11-03,key,yellow
+q020,library,16:00,2026-10-25,earphones,pink
+q021,AC3,12:10,2026-11-02,water_bottle,pink
