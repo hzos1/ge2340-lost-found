@@ -1,0 +1,5 @@
+{
+  "clip": "ViT-B/32 (openai)",
+  "cnn": "MobileNetV3-Small (ImageNet, frozen)",
+  "text_prompt": "a photo of a {colour} {category}"
+}

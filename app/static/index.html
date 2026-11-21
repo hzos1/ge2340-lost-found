@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lost-and-Found Matcher · GE2340 Group 26</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">GE2340 · Group 26 · CityUHK</p>
+        <h1>Lost-and-Found<br />Image/Text Matcher</h1>
+        <p class="members" id="members">So Shing Hin · Tu Kwan Yiu · Chan Kai Shun</p>
+      </div>
+      <div class="statbar" id="statbar" hidden>
+        <div><span id="stat-lost">0</span><small>Lost reports</small></div>
+        <div><span id="stat-found">0</span><small>Found items</small></div>
+        <div><span id="stat-total">0</span><small>Records in database</small></div>
+      </div>
+    </div>
+  </header>
+  <div class="wrap">
+    <nav>
+      <button type="button" class="active" data-view="lost">Report a lost item</button>
+      <button type="button" data-view="found">Report a found item</button>
+      <button type="button" data-view="records">Database</button>
+    </nav>
+    <main>
+      <section class="view active" id="view-lost">
+        <div class="layout">
+          <form class="panel" id="lost-form">
+            <h2>I lost something</h2>
+            <p class="hint">Save a lost report, then match it against found items that people have already uploaded. Training photos are not in this database.</p>
+            <div class="grid" id="lost-fields"></div>
+            <div class="actions">
+              <button class="primary" id="lost-btn" type="submit">Save and find matches</button>
+              <button class="ghost" id="lost-clear-photo" type="button">Clear photo</button>
+            </div>
+            <p class="formula" id="formula"></p>
+          </form>
+          <div>
+            <div id="lost-error" class="error" hidden></div>
+            <div class="notice" id="lost-notice" hidden></div>
+            <div class="map" id="lost-map" aria-label="CityUHK campus map"></div>
+            <div class="results">
+              <div class="result-col">
+                <h3>CLIP + place + time</h3>
+                <div id="lost-clip" class="empty">Upload a found item first. Then a lost report can be ranked against those photos.</div>
+              </div>
+              <div class="result-col">
+                <h3>CNN + linear classifier</h3>
+                <div id="lost-linear" class="empty">The comparison method scores category, colour, place, and time.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-found">
+        <div class="layout">
+          <form class="panel" id="found-form">
+            <h2>I found something</h2>
+            <p class="hint">A photo is required. The matcher stores the CLIP embedding of that photo and looks for a matching lost report.</p>
+            <div class="grid" id="found-fields"></div>
+            <div class="actions">
+              <button class="primary" id="found-btn" type="submit">Save found item</button>
+              <button class="ghost" id="found-clear-photo" type="button">Clear photo</button>
+            </div>
+          </form>
+          <div>
+            <div id="found-error" class="error" hidden></div>
+            <div class="notice" id="found-notice" hidden></div>
+            <div class="map" id="found-map" aria-label="CityUHK campus map"></div>
+            <div class="results">
+              <div class="result-col">
+                <h3>Possible owners · CLIP</h3>
+                <div id="found-clip" class="empty">If someone already reported this item as lost, it will appear here.</div>
+              </div>
+              <div class="result-col">
+                <h3>Possible owners · linear</h3>
+                <div id="found-linear" class="empty">Category, colour, place, and time compared with lost reports.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-records">
+        <div class="admin-bar panel">
+          <div>
+            <h2>All lost and found records</h2>
+            <p class="hint">Anyone can browse the live database. Only an admin with the staff password can delete a record.</p>
+          </div>
+          <label>Admin password
+            <input id="admin-password" type="password" autocomplete="off" placeholder="Required to delete" />
+          </label>
+        </div>
+        <div class="filters" id="filters"></div>
+        <p class="quiet" id="records-count"></p>
+        <div class="inventory" id="records"></div>
+      </section>
+      <p class="foot">Group 26 · Lost-and-Found Image/Text Matcher · Live records are stored separately from the training photos used to build CLIP and the CNN heads.</p>
+    </main>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

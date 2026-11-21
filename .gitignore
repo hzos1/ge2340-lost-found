@@ -1,0 +1,27 @@
+# Local training image datasets (too large for GitHub)
+KEY/
+Water Bottle/
+data/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+
+# Live uploads in the demo app
+app/data/photos/*
+!app/data/photos/.gitkeep
+app/data/vectors.npz
+app/data/*.tmp.npz
+
+# Debug overlay, not the real campus map
+app/static/campus-map-grid.jpg
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

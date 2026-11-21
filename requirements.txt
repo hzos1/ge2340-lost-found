@@ -1,0 +1,15 @@
+numpy
+pandas
+pillow
+scikit-learn
+matplotlib
+torch
+torchvision
+open-clip-torch
+ftfy
+regex
+tqdm
+huggingface_hub
+safetensors
+timm
+tiktoken

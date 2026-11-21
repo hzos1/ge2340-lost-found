@@ -1,0 +1,900 @@
+{
+  "group": {
+    "course": "GE2340",
+    "group": "26",
+    "title": "Lost-and-Found Image/Text Matcher",
+    "members": [
+      {
+        "name": "So Shing Hin",
+        "id": "59687520"
+      },
+      {
+        "name": "Tu Kwan Yiu",
+        "id": "60175669"
+      },
+      {
+        "name": "Chan Kai Shun",
+        "id": "59696515"
+      }
+    ]
+  },
+  "seed": 26,
+  "dataset": {
+    "total_photos": 416,
+    "gallery": 168,
+    "by_split": {
+      "train": 248,
+      "val": 84,
+      "test": 84
+    },
+    "by_category": {
+      "umbrella": 172,
+      "bottle": 172,
+      "key": 72
+    },
+    "by_colour": {
+      "gray": 211,
+      "pink": 13,
+      "white": 14,
+      "yellow": 11,
+      "brown": 45,
+      "blue": 30,
+      "black": 53,
+      "green": 12,
+      "orange": 19,
+      "purple": 1,
+      "red": 7
+    },
+    "sources": {
+      "key": "Kaggle Key-Images (Faique Ali, 2024)",
+      "bottle": "Kaggle Bottles Synthetic Images (Fih, 2022)",
+      "umbrella": "images.cv Umbrella Image Classification Dataset (2026)"
+    }
+  },
+  "models": {
+    "clip": "ViT-B/32 (openai)",
+    "cnn": "MobileNetV3-Small (ImageNet, frozen)",
+    "heads": "Multinomial logistic regression (softmax) on frozen CNN features",
+    "matcher": "Logistic regression on category match, colour match, location distance, and time difference"
+  },
+  "fusion_weights": {
+    "visual": 0.45,
+    "location": 0.25,
+    "time": 0.3
+  },
+  "weight_search": [
+    {
+      "weights": {
+        "visual": 0.45,
+        "location": 0.25,
+        "time": 0.3
+      },
+      "recall_at_5": 0.8452380952380952,
+      "mrr": 0.6442753672599792
+    },
+    {
+      "weights": {
+        "visual": 0.45,
+        "location": 0.3,
+        "time": 0.25
+      },
+      "recall_at_5": 0.8333333333333334,
+      "mrr": 0.616395890712738
+    },
+    {
+      "weights": {
+        "visual": 0.45,
+        "location": 0.2,
+        "time": 0.35
+      },
+      "recall_at_5": 0.7976190476190477,
+      "mrr": 0.6000388264656067
+    },
+    {
+      "weights": {
+        "visual": 0.45,
+        "location": 0.15,
+        "time": 0.4
+      },
+      "recall_at_5": 0.7380952380952381,
+      "mrr": 0.5756274461746216
+    },
+    {
+      "weights": {
+        "visual": 0.45,
+        "location": 0.1,
+        "time": 0.45
+      },
+      "recall_at_5": 0.7142857142857143,
+      "mrr": 0.5287542939186096
+    },
+    {
+      "weights": {
+        "visual": 0.55,
+        "location": 0.1,
+        "time": 0.35
+      },
+      "recall_at_5": 0.6785714285714286,
+      "mrr": 0.5152627229690552
+    },
+    {
+      "weights": {
+        "visual": 0.45,
+        "location": 0.05,
+        "time": 0.5
+      },
+      "recall_at_5": 0.6785714285714286,
+      "mrr": 0.49617162346839905
+    },
+    {
+      "weights": {
+        "visual": 0.55,
+        "location": 0.05,
+        "time": 0.4
+      },
+      "recall_at_5": 0.6666666666666666,
+      "mrr": 0.5156669020652771
+    },
+    {
+      "weights": {
+        "visual": 0.55,
+        "location": 0.2,
+        "time": 0.25
+      },
+      "recall_at_5": 0.6428571428571429,
+      "mrr": 0.5152794718742371
+    },
+    {
+      "weights": {
+        "visual": 0.55,
+        "location": 0.15,
+        "time": 0.3
+      },
+      "recall_at_5": 0.6428571428571429,
+      "mrr": 0.5121593475341797
+    },
+    {
+      "weights": {
+        "visual": 0.55,
+        "location": 0.25,
+        "time": 0.2
+      },
+      "recall_at_5": 0.6428571428571429,
+      "mrr": 0.48099321126937866
+    },
+    {
+      "weights": {
+        "visual": 0.55,
+        "location": 0.3,
+        "time": 0.15
+      },
+      "recall_at_5": 0.6190476190476191,
+      "mrr": 0.4249224066734314
+    },
+    {
+      "weights": {
+        "visual": 0.65,
+        "location": 0.05,
+        "time": 0.3
+      },
+      "recall_at_5": 0.5714285714285714,
+      "mrr": 0.4148716628551483
+    },
+    {
+      "weights": {
+        "visual": 0.65,
+        "location": 0.1,
+        "time": 0.25
+      },
+      "recall_at_5": 0.5714285714285714,
+      "mrr": 0.3962028920650482
+    },
+    {
+      "weights": {
+        "visual": 0.65,
+        "location": 0.15,
+        "time": 0.2
+      },
+      "recall_at_5": 0.5595238095238095,
+      "mrr": 0.3659203350543976
+    },
+    {
+      "weights": {
+        "visual": 0.65,
+        "location": 0.2,
+        "time": 0.15
+      },
+      "recall_at_5": 0.4880952380952381,
+      "mrr": 0.3292907476425171
+    },
+    {
+      "weights": {
+        "visual": 0.65,
+        "location": 0.25,
+        "time": 0.1
+      },
+      "recall_at_5": 0.4523809523809524,
+      "mrr": 0.29058656096458435
+    },
+    {
+      "weights": {
+        "visual": 0.75,
+        "location": 0.05,
+        "time": 0.2
+      },
+      "recall_at_5": 0.4166666666666667,
+      "mrr": 0.2585653066635132
+    },
+    {
+      "weights": {
+        "visual": 0.65,
+        "location": 0.3,
+        "time": 0.05
+      },
+      "recall_at_5": 0.39285714285714285,
+      "mrr": 0.2367425262928009
+    },
+    {
+      "weights": {
+        "visual": 0.75,
+        "location": 0.1,
+        "time": 0.15
+      },
+      "recall_at_5": 0.36904761904761907,
+      "mrr": 0.23482653498649597
+    },
+    {
+      "weights": {
+        "visual": 0.75,
+        "location": 0.15,
+        "time": 0.1
+      },
+      "recall_at_5": 0.35714285714285715,
+      "mrr": 0.21759076416492462
+    },
+    {
+      "weights": {
+        "visual": 0.75,
+        "location": 0.2,
+        "time": 0.05
+      },
+      "recall_at_5": 0.3333333333333333,
+      "mrr": 0.1958674043416977
+    },
+    {
+      "weights": {
+        "visual": 0.85,
+        "location": 0.05,
+        "time": 0.1
+      },
+      "recall_at_5": 0.23809523809523808,
+      "mrr": 0.1541883796453476
+    },
+    {
+      "weights": {
+        "visual": 0.85,
+        "location": 0.1,
+        "time": 0.05
+      },
+      "recall_at_5": 0.21428571428571427,
+      "mrr": 0.1416502594947815
+    }
+  ],
+  "linear_model": {
+    "coefficients": {
+      "category_match": 3.4763383865356445,
+      "colour_match": 0.45910435914993286,
+      "location_distance": -3.1475632190704346,
+      "time_difference": -6.310316562652588
+    },
+    "bias": 1.3192176818847656
+  },
+  "classification": {
+    "val": {
+      "n": 84,
+      "category_accuracy": 1.0,
+      "colour_accuracy": 0.5714285714285714,
+      "category_recall": {
+        "key": 1.0,
+        "umbrella": 1.0,
+        "bottle": 1.0
+      },
+      "colour_recall": {
+        "black": 0.2,
+        "white": 1.0,
+        "gray": 0.7441860465116279,
+        "red": 0.0,
+        "orange": 0.3333333333333333,
+        "yellow": 0.0,
+        "green": 1.0,
+        "blue": 0.5,
+        "brown": 0.5384615384615384,
+        "pink": 0.0
+      }
+    },
+    "test": {
+      "n": 84,
+      "category_accuracy": 0.9642857142857143,
+      "colour_accuracy": 0.5952380952380952,
+      "category_recall": {
+        "key": 0.9166666666666666,
+        "umbrella": 1.0,
+        "bottle": 0.9444444444444444
+      },
+      "colour_recall": {
+        "black": 0.9,
+        "white": 0.0,
+        "gray": 0.6829268292682927,
+        "red": 0.0,
+        "orange": 1.0,
+        "yellow": 0.0,
+        "green": 0.5,
+        "blue": 0.0,
+        "brown": 0.7272727272727273,
+        "pink": 0.0
+      }
+    },
+    "confusion_category": {
+      "labels": [
+        "key",
+        "umbrella",
+        "bottle"
+      ],
+      "matrix": [
+        [
+          11,
+          0,
+          1
+        ],
+        [
+          0,
+          36,
+          0
+        ],
+        [
+          1,
+          1,
+          34
+        ]
+      ]
+    }
+  },
+  "val": {
+    "n_queries": 84,
+    "gallery_size": 168,
+    "methods": {
+      "random": {
+        "n": 84,
+        "recall_at_1": 0.005952380952380952,
+        "recall_at_5": 0.02976190476190476,
+        "mrr": 0.03395329096560432,
+        "median_rank": 84.5,
+        "by_category": {
+          "bottle": {
+            "n": 36,
+            "recall_at_1": 0.005952380952380952,
+            "recall_at_5": 0.02976190476190476,
+            "mrr": 0.03395329096560432,
+            "median_rank": 84.5
+          },
+          "key": {
+            "n": 12,
+            "recall_at_1": 0.005952380952380952,
+            "recall_at_5": 0.02976190476190476,
+            "mrr": 0.03395329096560432,
+            "median_rank": 84.5
+          },
+          "umbrella": {
+            "n": 36,
+            "recall_at_1": 0.005952380952380952,
+            "recall_at_5": 0.02976190476190476,
+            "mrr": 0.03395329096560432,
+            "median_rank": 84.5
+          }
+        }
+      },
+      "metadata_oracle": {
+        "n": 84,
+        "recall_at_1": 0.8452380952380952,
+        "recall_at_5": 1.0,
+        "mrr": 0.9170635938644409,
+        "median_rank": 1.0,
+        "by_category": {
+          "key": {
+            "n": 12,
+            "recall_at_1": 0.8333333333333334,
+            "recall_at_5": 1.0,
+            "mrr": 0.9027778506278992,
+            "median_rank": 1.0
+          },
+          "umbrella": {
+            "n": 36,
+            "recall_at_1": 0.8333333333333334,
+            "recall_at_5": 1.0,
+            "mrr": 0.9083333611488342,
+            "median_rank": 1.0
+          },
+          "bottle": {
+            "n": 36,
+            "recall_at_1": 0.8611111111111112,
+            "recall_at_5": 1.0,
+            "mrr": 0.9305555820465088,
+            "median_rank": 1.0
+          }
+        }
+      },
+      "clip_visual": {
+        "n": 84,
+        "recall_at_1": 0.0,
+        "recall_at_5": 0.13095238095238096,
+        "mrr": 0.07759712636470795,
+        "median_rank": 34.5,
+        "by_category": {
+          "key": {
+            "n": 12,
+            "recall_at_1": 0.0,
+            "recall_at_5": 0.3333333333333333,
+            "mrr": 0.16029325127601624,
+            "median_rank": 13.0
+          },
+          "umbrella": {
+            "n": 36,
+            "recall_at_1": 0.0,
+            "recall_at_5": 0.1111111111111111,
+            "mrr": 0.07923624664545059,
+            "median_rank": 60.0
+          },
+          "bottle": {
+            "n": 36,
+            "recall_at_1": 0.0,
+            "recall_at_5": 0.08333333333333333,
+            "mrr": 0.048392653465270996,
+            "median_rank": 47.5
+          }
+        }
+      },
+      "clip_fusion": {
+        "n": 84,
+        "recall_at_1": 0.5119047619047619,
+        "recall_at_5": 0.8452380952380952,
+        "mrr": 0.6442753672599792,
+        "median_rank": 1.0,
+        "by_category": {
+          "key": {
+            "n": 12,
+            "recall_at_1": 0.75,
+            "recall_at_5": 1.0,
+            "mrr": 0.8611111640930176,
+            "median_rank": 1.0
+          },
+          "umbrella": {
+            "n": 36,
+            "recall_at_1": 0.3611111111111111,
+            "recall_at_5": 0.7222222222222222,
+            "mrr": 0.5204387903213501,
+            "median_rank": 2.5
+          },
+          "bottle": {
+            "n": 36,
+            "recall_at_1": 0.5833333333333334,
+            "recall_at_5": 0.9166666666666666,
+            "mrr": 0.6958333849906921,
+            "median_rank": 1.0
+          }
+        }
+      },
+      "cnn_linear": {
+        "n": 84,
+        "recall_at_1": 0.5595238095238095,
+        "recall_at_5": 0.9642857142857143,
+        "mrr": 0.7225340008735657,
+        "median_rank": 1.0,
+        "by_category": {
+          "key": {
+            "n": 12,
+            "recall_at_1": 0.6666666666666666,
+            "recall_at_5": 1.0,
+            "mrr": 0.7986111640930176,
+            "median_rank": 1.0
+          },
+          "umbrella": {
+            "n": 36,
+            "recall_at_1": 0.4722222222222222,
+            "recall_at_5": 0.9166666666666666,
+            "mrr": 0.6558201313018799,
+            "median_rank": 2.0
+          },
+          "bottle": {
+            "n": 36,
+            "recall_at_1": 0.6111111111111112,
+            "recall_at_5": 1.0,
+            "mrr": 0.763888955116272,
+            "median_rank": 1.0
+          }
+        }
+      }
+    }
+  },
+  "test": {
+    "n_queries": 84,
+    "gallery_size": 168,
+    "methods": {
+      "random": {
+        "n": 84,
+        "recall_at_1": 0.005952380952380952,
+        "recall_at_5": 0.02976190476190476,
+        "mrr": 0.03395329096560432,
+        "median_rank": 84.5,
+        "by_category": {
+          "bottle": {
+            "n": 36,
+            "recall_at_1": 0.005952380952380952,
+            "recall_at_5": 0.02976190476190476,
+            "mrr": 0.03395329096560432,
+            "median_rank": 84.5
+          },
+          "key": {
+            "n": 12,
+            "recall_at_1": 0.005952380952380952,
+            "recall_at_5": 0.02976190476190476,
+            "mrr": 0.03395329096560432,
+            "median_rank": 84.5
+          },
+          "umbrella": {
+            "n": 36,
+            "recall_at_1": 0.005952380952380952,
+            "recall_at_5": 0.02976190476190476,
+            "mrr": 0.03395329096560432,
+            "median_rank": 84.5
+          }
+        }
+      },
+      "metadata_oracle": {
+        "n": 84,
+        "recall_at_1": 0.8333333333333334,
+        "recall_at_5": 0.9523809523809523,
+        "mrr": 0.8871172666549683,
+        "median_rank": 1.0,
+        "by_category": {
+          "key": {
+            "n": 12,
+            "recall_at_1": 0.75,
+            "recall_at_5": 1.0,
+            "mrr": 0.8541666865348816,
+            "median_rank": 1.0
+          },
+          "umbrella": {
+            "n": 36,
+            "recall_at_1": 0.8888888888888888,
+            "recall_at_5": 0.9444444444444444,
+            "mrr": 0.9157738089561462,
+            "median_rank": 1.0
+          },
+          "bottle": {
+            "n": 36,
+            "recall_at_1": 0.8055555555555556,
+            "recall_at_5": 0.9444444444444444,
+            "mrr": 0.8694444298744202,
+            "median_rank": 1.0
+          }
+        }
+      },
+      "clip_visual": {
+        "n": 84,
+        "recall_at_1": 0.047619047619047616,
+        "recall_at_5": 0.13095238095238096,
+        "mrr": 0.11663757264614105,
+        "median_rank": 24.0,
+        "by_category": {
+          "key": {
+            "n": 12,
+            "recall_at_1": 0.08333333333333333,
+            "recall_at_5": 0.25,
+            "mrr": 0.20260584354400635,
+            "median_rank": 12.0
+          },
+          "umbrella": {
+            "n": 36,
+            "recall_at_1": 0.05555555555555555,
+            "recall_at_5": 0.1388888888888889,
+            "mrr": 0.10808786004781723,
+            "median_rank": 73.5
+          },
+          "bottle": {
+            "n": 36,
+            "recall_at_1": 0.027777777777777776,
+            "recall_at_5": 0.08333333333333333,
+            "mrr": 0.09653116762638092,
+            "median_rank": 22.5
+          }
+        }
+      },
+      "clip_fusion": {
+        "n": 84,
+        "recall_at_1": 0.4166666666666667,
+        "recall_at_5": 0.7738095238095238,
+        "mrr": 0.5714775323867798,
+        "median_rank": 2.0,
+        "by_category": {
+          "key": {
+            "n": 12,
+            "recall_at_1": 0.5,
+            "recall_at_5": 1.0,
+            "mrr": 0.7361111044883728,
+            "median_rank": 1.5
+          },
+          "umbrella": {
+            "n": 36,
+            "recall_at_1": 0.3333333333333333,
+            "recall_at_5": 0.6666666666666666,
+            "mrr": 0.480819433927536,
+            "median_rank": 3.0
+          },
+          "bottle": {
+            "n": 36,
+            "recall_at_1": 0.4722222222222222,
+            "recall_at_5": 0.8055555555555556,
+            "mrr": 0.6072577238082886,
+            "median_rank": 2.0
+          }
+        }
+      },
+      "cnn_linear": {
+        "n": 84,
+        "recall_at_1": 0.4880952380952381,
+        "recall_at_5": 0.9404761904761905,
+        "mrr": 0.6634383201599121,
+        "median_rank": 2.0,
+        "by_category": {
+          "key": {
+            "n": 12,
+            "recall_at_1": 0.4166666666666667,
+            "recall_at_5": 1.0,
+            "mrr": 0.6736111640930176,
+            "median_rank": 2.0
+          },
+          "umbrella": {
+            "n": 36,
+            "recall_at_1": 0.5555555555555556,
+            "recall_at_5": 0.9444444444444444,
+            "mrr": 0.7023147940635681,
+            "median_rank": 1.0
+          },
+          "bottle": {
+            "n": 36,
+            "recall_at_1": 0.4444444444444444,
+            "recall_at_5": 0.9166666666666666,
+            "mrr": 0.6211709976196289,
+            "median_rank": 2.0
+          }
+        }
+      }
+    }
+  },
+  "cases": [
+    {
+      "method": "clip_fusion",
+      "rank": 1,
+      "hit_at_5": true,
+      "query": {
+        "id": "test_004",
+        "target_id": "bottle_0141",
+        "category": "bottle",
+        "colour": "gray",
+        "location": "Student Residence Halls",
+        "lost_time": "2026-11-06T14:20"
+      },
+      "top": [
+        {
+          "rank": 1,
+          "id": "bottle_0141",
+          "score": 0.6890916228294373,
+          "is_target": true
+        },
+        {
+          "rank": 2,
+          "id": "key_0054",
+          "score": 0.6421005725860596,
+          "is_target": false
+        },
+        {
+          "rank": 3,
+          "id": "bottle_0124",
+          "score": 0.6415977478027344,
+          "is_target": false
+        },
+        {
+          "rank": 4,
+          "id": "bottle_0138",
+          "score": 0.578660249710083,
+          "is_target": false
+        },
+        {
+          "rank": 5,
+          "id": "bottle_0158",
+          "score": 0.5759479999542236,
+          "is_target": false
+        }
+      ]
+    },
+    {
+      "method": "clip_fusion",
+      "rank": 1,
+      "hit_at_5": true,
+      "query": {
+        "id": "test_036",
+        "target_id": "key_0061",
+        "category": "key",
+        "colour": "black",
+        "location": "Li Dak Sum Yip Yio Chin Academic Building",
+        "lost_time": "2026-11-03T17:01"
+      },
+      "top": [
+        {
+          "rank": 1,
+          "id": "key_0061",
+          "score": 0.8467611074447632,
+          "is_target": true
+        },
+        {
+          "rank": 2,
+          "id": "key_0052",
+          "score": 0.7946383953094482,
+          "is_target": false
+        },
+        {
+          "rank": 3,
+          "id": "umbrella_0134",
+          "score": 0.6613372564315796,
+          "is_target": false
+        },
+        {
+          "rank": 4,
+          "id": "key_0071",
+          "score": 0.6359687447547913,
+          "is_target": false
+        },
+        {
+          "rank": 5,
+          "id": "key_0070",
+          "score": 0.6214209198951721,
+          "is_target": false
+        }
+      ]
+    },
+    {
+      "method": "clip_fusion",
+      "rank": 1,
+      "hit_at_5": true,
+      "query": {
+        "id": "test_050",
+        "target_id": "umbrella_0139",
+        "category": "umbrella",
+        "colour": "gray",
+        "location": "Lau Ming Wai Academic Building",
+        "lost_time": "2026-10-20T22:23"
+      },
+      "top": [
+        {
+          "rank": 1,
+          "id": "umbrella_0139",
+          "score": 0.6537080407142639,
+          "is_target": true
+        },
+        {
+          "rank": 2,
+          "id": "umbrella_0166",
+          "score": 0.6316365003585815,
+          "is_target": false
+        },
+        {
+          "rank": 3,
+          "id": "umbrella_0163",
+          "score": 0.6057190895080566,
+          "is_target": false
+        },
+        {
+          "rank": 4,
+          "id": "umbrella_0158",
+          "score": 0.5698115229606628,
+          "is_target": false
+        },
+        {
+          "rank": 5,
+          "id": "bottle_0158",
+          "score": 0.5654637813568115,
+          "is_target": false
+        }
+      ]
+    },
+    {
+      "method": "clip_fusion",
+      "rank": 54,
+      "hit_at_5": false,
+      "query": {
+        "id": "test_054",
+        "target_id": "umbrella_0143",
+        "category": "umbrella",
+        "colour": "gray",
+        "location": "Bank of China Complex",
+        "lost_time": "2026-10-19T21:18"
+      },
+      "top": [
+        {
+          "rank": 1,
+          "id": "umbrella_0158",
+          "score": 0.6574978232383728,
+          "is_target": false
+        },
+        {
+          "rank": 2,
+          "id": "umbrella_0112",
+          "score": 0.6412240266799927,
+          "is_target": false
+        },
+        {
+          "rank": 3,
+          "id": "umbrella_0145",
+          "score": 0.6103112101554871,
+          "is_target": false
+        },
+        {
+          "rank": 4,
+          "id": "bottle_0123",
+          "score": 0.610122799873352,
+          "is_target": false
+        },
+        {
+          "rank": 5,
+          "id": "key_0056",
+          "score": 0.5990532636642456,
+          "is_target": false
+        }
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "label": "Gray water bottle",
+      "query": {
+        "id": "test_004",
+        "target_id": "bottle_0141",
+        "category": "bottle",
+        "colour": "gray",
+        "location": "Student Residence Halls",
+        "lost_time": "2026-11-06T14:20"
+      }
+    },
+    {
+      "label": "Black key",
+      "query": {
+        "id": "test_036",
+        "target_id": "key_0061",
+        "category": "key",
+        "colour": "black",
+        "location": "Li Dak Sum Yip Yio Chin Academic Building",
+        "lost_time": "2026-11-03T17:01"
+      }
+    },
+    {
+      "label": "Gray umbrella",
+      "query": {
+        "id": "test_050",
+        "target_id": "umbrella_0139",
+        "category": "umbrella",
+        "colour": "gray",
+        "location": "Lau Ming Wai Academic Building",
+        "lost_time": "2026-10-20T22:23"
+      }
+    }
+  ],
+  "findings": [
+    "The test set has 84 lost-item queries. Each query is ranked against 168 found records that the classifiers never trained on. A search counts as successful when the correct record appears in the top 5.",
+    "CLIP with location and time reaches Recall@5 of 77.4% (MRR 0.571). CLIP visual similarity alone reaches 13.1%. The CNN plus linear classifier reaches 94.0%. Random ranking reaches 3.0%. An oracle that already knows the true category and colour reaches 95.2%.",
+    "Adding place and time lifts CLIP above visual similarity alone. The validation search set the weights to 0.45 visual, 0.25 place, and 0.30 time. Many photos share a colour name, so the short text prompt cannot pick one record by itself, and place and time break those ties.",
+    "The CNN plus linear classifier is ahead of CLIP on this split. Once the photo is reduced to category and colour, the learned weights can lean on place and time. That decision is easy to explain, and it can only use the colour names seen in training.",
+    "In the linear matcher, category agreement raises the probability (weight 3.48); colour agreement raises the probability (weight 0.46); location distance lowers the probability (weight -3.15); time difference lowers the probability (weight -6.31).",
+    "On held-out photos, the category softmax reaches 96.4% accuracy and the colour softmax reaches 59.5%. Colour labels come from an automatic dominant-colour reading, so outdoor backgrounds can make the umbrella labels noisy. The bottle photos are synthetic product shots, and the key set is small, so similar items remain hard to separate.",
+    "Campus place and time are simulated, which matches the data plan in the proposal. The system runs locally, and the public photos do not include student cards or faces. Phones, cables, earphones, and computers from the proposal are not in the collected image folders, so this version covers keys, umbrellas, and water bottles."
+  ]
+}
