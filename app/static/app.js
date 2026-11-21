@@ -269,13 +269,13 @@ function matchBody(hit, mode) {
   if (mode === "clip") {
     const bars = document.createElement("div");
     bars.className = "bars";
-    bars.append(part(hit.visual_part, "#1d6a5f"), part(hit.location_part, "#c4622d"), part(hit.time_part, "#8d3d32"));
+    bars.append(part(hit.visual_part, "#7c6cf6"), part(hit.location_part, "#9486f8"), part(hit.time_part, "#5b4ed6"));
     const legend = document.createElement("div");
     legend.className = "legend";
     legend.append(
-      chip("#1d6a5f", `visual ${pct(hit.visual_part)}`),
-      chip("#c4622d", `place ${pct(hit.location_part)}`),
-      chip("#8d3d32", `time ${pct(hit.time_part)}`)
+      chip("#7c6cf6", `visual ${pct(hit.visual_part)}`),
+      chip("#9486f8", `place ${pct(hit.location_part)}`),
+      chip("#5b4ed6", `time ${pct(hit.time_part)}`)
     );
     body.append(bars, legend);
   } else {

@@ -3,672 +3,1192 @@
     "id": "test_000",
     "target_id": "bottle_0137",
     "category": "bottle",
-    "colour": "gray",
-    "location": "AC1 Canteen",
-    "lost_time": "2026-10-22T07:35"
+    "colour": "blue",
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-11-08T09:06"
   },
   {
     "id": "test_001",
     "target_id": "bottle_0138",
     "category": "bottle",
-    "colour": "gray",
-    "location": "AC2 Canteen",
-    "lost_time": "2026-11-09T14:25"
+    "colour": "brown",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-11-08T16:21"
   },
   {
     "id": "test_002",
     "target_id": "bottle_0139",
     "category": "bottle",
-    "colour": "gray",
-    "location": "Yeung Kin Man Academic Building",
-    "lost_time": "2026-11-13T03:25"
+    "colour": "brown",
+    "location": "Student Residence",
+    "lost_time": "2026-10-19T09:12"
   },
   {
     "id": "test_003",
     "target_id": "bottle_0140",
     "category": "bottle",
     "colour": "gray",
-    "location": "Student Residence Halls",
-    "lost_time": "2026-11-09T03:01"
+    "location": "Student Residence",
+    "lost_time": "2026-11-06T06:19"
   },
   {
     "id": "test_004",
     "target_id": "bottle_0141",
     "category": "bottle",
     "colour": "gray",
-    "location": "Student Residence Halls",
-    "lost_time": "2026-11-06T14:20"
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-11-09T12:57"
   },
   {
     "id": "test_005",
     "target_id": "bottle_0142",
     "category": "bottle",
-    "colour": "brown",
-    "location": "AC2 Canteen",
-    "lost_time": "2026-11-13T20:24"
+    "colour": "gray",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-11-11T12:35"
   },
   {
     "id": "test_006",
     "target_id": "bottle_0143",
     "category": "bottle",
-    "colour": "brown",
-    "location": "Run Run Shaw Library",
-    "lost_time": "2026-11-01T22:40"
+    "colour": "black",
+    "location": "Hu Fa Kuang Sports Centre",
+    "lost_time": "2026-11-06T10:10"
   },
   {
     "id": "test_007",
     "target_id": "bottle_0144",
     "category": "bottle",
     "colour": "brown",
-    "location": "Run Run Shaw Library",
-    "lost_time": "2026-11-05T18:06"
+    "location": "Student Residence",
+    "lost_time": "2026-10-29T12:13"
   },
   {
     "id": "test_008",
     "target_id": "bottle_0145",
     "category": "bottle",
-    "colour": "blue",
-    "location": "Student Residence Halls",
-    "lost_time": "2026-10-21T19:44"
+    "colour": "orange",
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-11-11T22:04"
   },
   {
     "id": "test_009",
     "target_id": "bottle_0146",
     "category": "bottle",
-    "colour": "brown",
-    "location": "Bank of China Complex",
-    "lost_time": "2026-11-11T02:42"
+    "colour": "gray",
+    "location": "Hu Fa Kuang Sports Centre",
+    "lost_time": "2026-11-14T00:20"
   },
   {
     "id": "test_010",
     "target_id": "bottle_0147",
     "category": "bottle",
     "colour": "gray",
-    "location": "Yeung Kin Man Academic Building",
-    "lost_time": "2026-11-05T06:30"
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-11-14T03:43"
   },
   {
     "id": "test_011",
     "target_id": "bottle_0148",
     "category": "bottle",
-    "colour": "brown",
-    "location": "Li Dak Sum Yip Yio Chin Academic Building",
-    "lost_time": "2026-10-25T15:57"
+    "colour": "black",
+    "location": "Bank of China Complex",
+    "lost_time": "2026-11-10T06:58"
   },
   {
     "id": "test_012",
     "target_id": "bottle_0149",
     "category": "bottle",
     "colour": "brown",
-    "location": "Run Run Shaw Library",
-    "lost_time": "2026-10-22T22:43"
+    "location": "Student Residence",
+    "lost_time": "2026-11-07T22:00"
   },
   {
     "id": "test_013",
     "target_id": "bottle_0150",
     "category": "bottle",
     "colour": "gray",
-    "location": "Hu Fa Kuang Sports Centre",
-    "lost_time": "2026-11-04T08:20"
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-10-20T03:23"
   },
   {
     "id": "test_014",
     "target_id": "bottle_0151",
     "category": "bottle",
-    "colour": "green",
-    "location": "AC2 Canteen",
-    "lost_time": "2026-11-08T20:00"
+    "colour": "blue",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-10-27T06:40"
   },
   {
     "id": "test_015",
     "target_id": "bottle_0152",
     "category": "bottle",
-    "colour": "blue",
-    "location": "Lau Ming Wai Academic Building",
-    "lost_time": "2026-10-20T05:45"
+    "colour": "red",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-11-09T03:42"
   },
   {
     "id": "test_016",
     "target_id": "bottle_0153",
     "category": "bottle",
-    "colour": "brown",
-    "location": "Student Residence Halls",
-    "lost_time": "2026-11-15T06:57"
+    "colour": "gray",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-10-22T14:48"
   },
   {
     "id": "test_017",
     "target_id": "bottle_0154",
     "category": "bottle",
-    "colour": "gray",
-    "location": "Bank of China Complex",
-    "lost_time": "2026-10-24T00:44"
+    "colour": "orange",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-11-10T11:30"
   },
   {
     "id": "test_018",
     "target_id": "bottle_0155",
     "category": "bottle",
-    "colour": "brown",
-    "location": "Lau Ming Wai Academic Building",
-    "lost_time": "2026-10-31T18:31"
+    "colour": "gray",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-11-14T09:54"
   },
   {
     "id": "test_019",
     "target_id": "bottle_0156",
     "category": "bottle",
     "colour": "blue",
-    "location": "Yeung Kin Man Academic Building",
-    "lost_time": "2026-11-04T05:33"
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-10-25T15:02"
   },
   {
     "id": "test_020",
     "target_id": "bottle_0157",
     "category": "bottle",
-    "colour": "gray",
-    "location": "Lau Ming Wai Academic Building",
-    "lost_time": "2026-11-05T00:32"
+    "colour": "brown",
+    "location": "Hu Fa Kuang Sports Centre",
+    "lost_time": "2026-10-24T15:02"
   },
   {
     "id": "test_021",
     "target_id": "bottle_0158",
     "category": "bottle",
-    "colour": "gray",
-    "location": "Yeung Kin Man Academic Building",
-    "lost_time": "2026-10-22T06:21"
+    "colour": "black",
+    "location": "Student Residence",
+    "lost_time": "2026-10-20T02:16"
   },
   {
     "id": "test_022",
     "target_id": "bottle_0159",
     "category": "bottle",
-    "colour": "gray",
-    "location": "Li Dak Sum Yip Yio Chin Academic Building",
-    "lost_time": "2026-10-28T21:03"
+    "colour": "yellow",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-11-14T14:53"
   },
   {
     "id": "test_023",
     "target_id": "bottle_0160",
     "category": "bottle",
-    "colour": "brown",
-    "location": "Run Run Shaw Library",
-    "lost_time": "2026-10-21T17:57"
+    "colour": "orange",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-10-26T18:59"
   },
   {
     "id": "test_024",
     "target_id": "bottle_0161",
     "category": "bottle",
-    "colour": "orange",
-    "location": "AC1 Canteen",
-    "lost_time": "2026-10-30T17:45"
+    "colour": "gray",
+    "location": "Hu Fa Kuang Sports Centre",
+    "lost_time": "2026-10-25T16:28"
   },
   {
     "id": "test_025",
     "target_id": "bottle_0162",
     "category": "bottle",
     "colour": "gray",
-    "location": "Li Dak Sum Yip Yio Chin Academic Building",
-    "lost_time": "2026-10-31T12:24"
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-10-21T18:38"
   },
   {
     "id": "test_026",
     "target_id": "bottle_0163",
     "category": "bottle",
-    "colour": "black",
-    "location": "Li Dak Sum Yip Yio Chin Academic Building",
-    "lost_time": "2026-11-02T05:07"
+    "colour": "orange",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-11-13T05:20"
   },
   {
     "id": "test_027",
     "target_id": "bottle_0164",
     "category": "bottle",
-    "colour": "green",
-    "location": "Hu Fa Kuang Sports Centre",
-    "lost_time": "2026-10-21T18:38"
+    "colour": "black",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-10-22T06:38"
   },
   {
     "id": "test_028",
     "target_id": "bottle_0165",
     "category": "bottle",
-    "colour": "brown",
-    "location": "AC2 Canteen",
-    "lost_time": "2026-11-16T00:44"
+    "colour": "gray",
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-11-03T14:41"
   },
   {
     "id": "test_029",
     "target_id": "bottle_0166",
     "category": "bottle",
-    "colour": "orange",
-    "location": "Bank of China Complex",
-    "lost_time": "2026-11-02T18:25"
+    "colour": "gray",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-10-19T14:43"
   },
   {
     "id": "test_030",
     "target_id": "bottle_0167",
     "category": "bottle",
-    "colour": "brown",
-    "location": "Li Dak Sum Yip Yio Chin Academic Building",
-    "lost_time": "2026-10-27T12:55"
+    "colour": "gray",
+    "location": "Student Residence",
+    "lost_time": "2026-11-15T15:39"
   },
   {
     "id": "test_031",
     "target_id": "bottle_0168",
     "category": "bottle",
     "colour": "gray",
-    "location": "AC1 Canteen",
-    "lost_time": "2026-11-11T10:20"
+    "location": "Hu Fa Kuang Sports Centre",
+    "lost_time": "2026-11-10T17:42"
   },
   {
     "id": "test_032",
     "target_id": "bottle_0169",
     "category": "bottle",
-    "colour": "red",
-    "location": "Yeung Kin Man Academic Building",
-    "lost_time": "2026-10-21T15:34"
+    "colour": "pink",
+    "location": "Student Residence",
+    "lost_time": "2026-10-28T10:14"
   },
   {
     "id": "test_033",
     "target_id": "bottle_0170",
     "category": "bottle",
-    "colour": "gray",
-    "location": "AC3 Canteen",
-    "lost_time": "2026-10-22T02:54"
+    "colour": "blue",
+    "location": "Student Residence",
+    "lost_time": "2026-11-06T16:21"
   },
   {
     "id": "test_034",
     "target_id": "bottle_0171",
     "category": "bottle",
     "colour": "gray",
-    "location": "Hu Fa Kuang Sports Centre",
-    "lost_time": "2026-11-14T19:41"
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-10-30T05:59"
   },
   {
     "id": "test_035",
     "target_id": "bottle_0172",
     "category": "bottle",
     "colour": "gray",
-    "location": "Lau Ming Wai Academic Building",
-    "lost_time": "2026-11-02T06:06"
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-11-13T02:26"
   },
   {
     "id": "test_036",
-    "target_id": "key_0061",
-    "category": "key",
-    "colour": "black",
-    "location": "Li Dak Sum Yip Yio Chin Academic Building",
-    "lost_time": "2026-11-03T17:01"
+    "target_id": "earphone_0096",
+    "category": "earphone",
+    "colour": "gray",
+    "location": "Student Residence",
+    "lost_time": "2026-11-14T06:53"
   },
   {
     "id": "test_037",
-    "target_id": "key_0062",
-    "category": "key",
-    "colour": "gray",
-    "location": "Lau Ming Wai Academic Building",
-    "lost_time": "2026-10-21T13:52"
+    "target_id": "earphone_0097",
+    "category": "earphone",
+    "colour": "black",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-10-21T06:15"
   },
   {
     "id": "test_038",
-    "target_id": "key_0063",
-    "category": "key",
-    "colour": "black",
-    "location": "AC1 Canteen",
-    "lost_time": "2026-11-13T19:58"
+    "target_id": "earphone_0098",
+    "category": "earphone",
+    "colour": "gray",
+    "location": "Student Residence",
+    "lost_time": "2026-11-09T05:53"
   },
   {
     "id": "test_039",
-    "target_id": "key_0064",
-    "category": "key",
+    "target_id": "earphone_0099",
+    "category": "earphone",
     "colour": "gray",
-    "location": "Li Dak Sum Yip Yio Chin Academic Building",
-    "lost_time": "2026-10-21T17:49"
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-11-08T06:22"
   },
   {
     "id": "test_040",
-    "target_id": "key_0065",
-    "category": "key",
+    "target_id": "earphone_0100",
+    "category": "earphone",
     "colour": "black",
-    "location": "AC3 Canteen",
-    "lost_time": "2026-11-01T15:14"
+    "location": "Student Residence",
+    "lost_time": "2026-10-23T04:05"
   },
   {
     "id": "test_041",
-    "target_id": "key_0066",
-    "category": "key",
-    "colour": "black",
-    "location": "Hu Fa Kuang Sports Centre",
-    "lost_time": "2026-10-19T03:38"
+    "target_id": "earphone_0101",
+    "category": "earphone",
+    "colour": "gray",
+    "location": "Student Residence",
+    "lost_time": "2026-11-15T17:25"
   },
   {
     "id": "test_042",
-    "target_id": "key_0067",
-    "category": "key",
-    "colour": "black",
-    "location": "AC1 Canteen",
-    "lost_time": "2026-11-01T10:07"
+    "target_id": "earphone_0102",
+    "category": "earphone",
+    "colour": "blue",
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-10-28T02:55"
   },
   {
     "id": "test_043",
-    "target_id": "key_0068",
-    "category": "key",
-    "colour": "white",
-    "location": "AC2 Canteen",
-    "lost_time": "2026-11-09T22:42"
+    "target_id": "earphone_0103",
+    "category": "earphone",
+    "colour": "black",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-10-26T19:16"
   },
   {
     "id": "test_044",
-    "target_id": "key_0069",
-    "category": "key",
+    "target_id": "earphone_0104",
+    "category": "earphone",
     "colour": "gray",
-    "location": "Yeung Kin Man Academic Building",
-    "lost_time": "2026-10-27T08:39"
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-11-08T13:05"
   },
   {
     "id": "test_045",
-    "target_id": "key_0070",
-    "category": "key",
+    "target_id": "earphone_0105",
+    "category": "earphone",
     "colour": "gray",
-    "location": "Run Run Shaw Library",
-    "lost_time": "2026-11-04T07:29"
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-10-31T01:24"
   },
   {
     "id": "test_046",
-    "target_id": "key_0071",
-    "category": "key",
-    "colour": "gray",
-    "location": "Yeung Kin Man Academic Building",
-    "lost_time": "2026-10-29T07:57"
+    "target_id": "earphone_0106",
+    "category": "earphone",
+    "colour": "black",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-10-26T17:10"
   },
   {
     "id": "test_047",
-    "target_id": "key_0072",
-    "category": "key",
-    "colour": "gray",
-    "location": "Li Dak Sum Yip Yio Chin Academic Building",
-    "lost_time": "2026-10-26T03:24"
+    "target_id": "earphone_0107",
+    "category": "earphone",
+    "colour": "black",
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-10-20T12:21"
   },
   {
     "id": "test_048",
-    "target_id": "umbrella_0137",
-    "category": "umbrella",
+    "target_id": "earphone_0108",
+    "category": "earphone",
     "colour": "gray",
-    "location": "Student Residence Halls",
-    "lost_time": "2026-11-04T04:39"
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-10-24T18:14"
   },
   {
     "id": "test_049",
-    "target_id": "umbrella_0138",
-    "category": "umbrella",
-    "colour": "blue",
-    "location": "AC1 Canteen",
-    "lost_time": "2026-11-09T15:31"
+    "target_id": "earphone_0109",
+    "category": "earphone",
+    "colour": "black",
+    "location": "Bank of China Complex",
+    "lost_time": "2026-10-22T01:57"
   },
   {
     "id": "test_050",
-    "target_id": "umbrella_0139",
-    "category": "umbrella",
+    "target_id": "earphone_0110",
+    "category": "earphone",
     "colour": "gray",
-    "location": "Lau Ming Wai Academic Building",
-    "lost_time": "2026-10-20T22:23"
+    "location": "Student Residence",
+    "lost_time": "2026-10-31T05:15"
   },
   {
     "id": "test_051",
-    "target_id": "umbrella_0140",
-    "category": "umbrella",
+    "target_id": "earphone_0111",
+    "category": "earphone",
     "colour": "gray",
-    "location": "Li Dak Sum Yip Yio Chin Academic Building",
-    "lost_time": "2026-10-30T07:32"
+    "location": "Hu Fa Kuang Sports Centre",
+    "lost_time": "2026-11-11T03:42"
   },
   {
     "id": "test_052",
-    "target_id": "umbrella_0141",
-    "category": "umbrella",
+    "target_id": "earphone_0112",
+    "category": "earphone",
     "colour": "gray",
     "location": "Hu Fa Kuang Sports Centre",
-    "lost_time": "2026-10-24T10:30"
+    "lost_time": "2026-10-30T01:13"
   },
   {
     "id": "test_053",
-    "target_id": "umbrella_0142",
-    "category": "umbrella",
-    "colour": "red",
-    "location": "AC1 Canteen",
-    "lost_time": "2026-10-30T00:23"
+    "target_id": "earphone_0113",
+    "category": "earphone",
+    "colour": "white",
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-10-31T06:50"
   },
   {
     "id": "test_054",
-    "target_id": "umbrella_0143",
-    "category": "umbrella",
-    "colour": "gray",
-    "location": "Bank of China Complex",
-    "lost_time": "2026-10-19T21:18"
+    "target_id": "earphone_0114",
+    "category": "earphone",
+    "colour": "black",
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-10-25T16:45"
   },
   {
     "id": "test_055",
-    "target_id": "umbrella_0144",
-    "category": "umbrella",
+    "target_id": "earphone_0115",
+    "category": "earphone",
     "colour": "gray",
-    "location": "Hu Fa Kuang Sports Centre",
-    "lost_time": "2026-11-13T04:57"
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-11-03T10:15"
   },
   {
     "id": "test_056",
-    "target_id": "umbrella_0145",
-    "category": "umbrella",
-    "colour": "black",
-    "location": "Hu Fa Kuang Sports Centre",
-    "lost_time": "2026-10-19T11:44"
+    "target_id": "earphone_0116",
+    "category": "earphone",
+    "colour": "gray",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-10-28T13:42"
   },
   {
     "id": "test_057",
-    "target_id": "umbrella_0146",
-    "category": "umbrella",
-    "colour": "gray",
-    "location": "AC2 Canteen",
-    "lost_time": "2026-10-22T14:32"
+    "target_id": "earphone_0117",
+    "category": "earphone",
+    "colour": "black",
+    "location": "Bank of China Complex",
+    "lost_time": "2026-11-07T16:44"
   },
   {
     "id": "test_058",
-    "target_id": "umbrella_0147",
-    "category": "umbrella",
+    "target_id": "earphone_0118",
+    "category": "earphone",
     "colour": "gray",
-    "location": "Bank of China Complex",
-    "lost_time": "2026-10-23T17:25"
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-10-28T19:16"
   },
   {
     "id": "test_059",
-    "target_id": "umbrella_0148",
-    "category": "umbrella",
-    "colour": "blue",
-    "location": "AC2 Canteen",
-    "lost_time": "2026-11-13T05:38"
+    "target_id": "earphone_0119",
+    "category": "earphone",
+    "colour": "gray",
+    "location": "Bank of China Complex",
+    "lost_time": "2026-11-08T11:33"
   },
   {
     "id": "test_060",
-    "target_id": "umbrella_0149",
-    "category": "umbrella",
-    "colour": "pink",
-    "location": "Li Dak Sum Yip Yio Chin Academic Building",
-    "lost_time": "2026-11-13T11:15"
+    "target_id": "earphone_0120",
+    "category": "earphone",
+    "colour": "gray",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-10-30T01:32"
   },
   {
     "id": "test_061",
-    "target_id": "umbrella_0150",
-    "category": "umbrella",
+    "target_id": "key_0061",
+    "category": "key",
     "colour": "black",
-    "location": "Lau Ming Wai Academic Building",
-    "lost_time": "2026-11-15T05:50"
+    "location": "Student Residence",
+    "lost_time": "2026-10-24T11:21"
   },
   {
     "id": "test_062",
-    "target_id": "umbrella_0151",
-    "category": "umbrella",
-    "colour": "white",
-    "location": "Lau Ming Wai Academic Building",
-    "lost_time": "2026-11-07T15:38"
+    "target_id": "key_0062",
+    "category": "key",
+    "colour": "gray",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-10-31T13:03"
   },
   {
     "id": "test_063",
-    "target_id": "umbrella_0152",
-    "category": "umbrella",
-    "colour": "gray",
-    "location": "AC3 Canteen",
-    "lost_time": "2026-11-07T20:44"
+    "target_id": "key_0063",
+    "category": "key",
+    "colour": "black",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-11-09T22:12"
   },
   {
     "id": "test_064",
-    "target_id": "umbrella_0153",
-    "category": "umbrella",
-    "colour": "orange",
-    "location": "Run Run Shaw Library",
-    "lost_time": "2026-10-24T07:40"
+    "target_id": "key_0064",
+    "category": "key",
+    "colour": "black",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-11-06T13:45"
   },
   {
     "id": "test_065",
-    "target_id": "umbrella_0154",
-    "category": "umbrella",
-    "colour": "gray",
-    "location": "Student Residence Halls",
-    "lost_time": "2026-11-13T03:52"
+    "target_id": "key_0065",
+    "category": "key",
+    "colour": "black",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-11-04T11:24"
   },
   {
     "id": "test_066",
-    "target_id": "umbrella_0155",
-    "category": "umbrella",
+    "target_id": "key_0066",
+    "category": "key",
     "colour": "gray",
-    "location": "AC3 Canteen",
-    "lost_time": "2026-11-08T05:45"
+    "location": "Student Residence",
+    "lost_time": "2026-11-13T08:37"
   },
   {
     "id": "test_067",
-    "target_id": "umbrella_0156",
-    "category": "umbrella",
-    "colour": "black",
-    "location": "Run Run Shaw Library",
-    "lost_time": "2026-11-10T03:46"
+    "target_id": "key_0067",
+    "category": "key",
+    "colour": "gray",
+    "location": "Student Residence",
+    "lost_time": "2026-11-14T15:38"
   },
   {
     "id": "test_068",
-    "target_id": "umbrella_0157",
-    "category": "umbrella",
+    "target_id": "key_0068",
+    "category": "key",
     "colour": "gray",
-    "location": "Bank of China Complex",
-    "lost_time": "2026-11-13T15:57"
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-10-21T19:44"
   },
   {
     "id": "test_069",
-    "target_id": "umbrella_0158",
-    "category": "umbrella",
-    "colour": "white",
+    "target_id": "key_0069",
+    "category": "key",
+    "colour": "black",
     "location": "Bank of China Complex",
-    "lost_time": "2026-11-01T03:34"
+    "lost_time": "2026-11-11T17:25"
   },
   {
     "id": "test_070",
-    "target_id": "umbrella_0159",
-    "category": "umbrella",
-    "colour": "pink",
-    "location": "Bank of China Complex",
-    "lost_time": "2026-10-24T00:55"
+    "target_id": "key_0070",
+    "category": "key",
+    "colour": "gray",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-11-14T00:10"
   },
   {
     "id": "test_071",
-    "target_id": "umbrella_0160",
-    "category": "umbrella",
-    "colour": "gray",
-    "location": "Hu Fa Kuang Sports Centre",
-    "lost_time": "2026-10-20T09:54"
+    "target_id": "key_0071",
+    "category": "key",
+    "colour": "black",
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-11-12T10:05"
   },
   {
     "id": "test_072",
-    "target_id": "umbrella_0161",
-    "category": "umbrella",
+    "target_id": "key_0072",
+    "category": "key",
     "colour": "gray",
-    "location": "Li Dak Sum Yip Yio Chin Academic Building",
-    "lost_time": "2026-10-31T06:10"
+    "location": "Bank of China Complex",
+    "lost_time": "2026-11-14T16:19"
   },
   {
     "id": "test_073",
-    "target_id": "umbrella_0162",
-    "category": "umbrella",
-    "colour": "orange",
-    "location": "Run Run Shaw Library",
-    "lost_time": "2026-11-05T04:17"
+    "target_id": "laptop_0141",
+    "category": "laptop",
+    "colour": "gray",
+    "location": "Hu Fa Kuang Sports Centre",
+    "lost_time": "2026-10-24T08:09"
   },
   {
     "id": "test_074",
-    "target_id": "umbrella_0163",
-    "category": "umbrella",
-    "colour": "blue",
-    "location": "Yeung Kin Man Academic Building",
-    "lost_time": "2026-11-02T04:14"
+    "target_id": "laptop_0142",
+    "category": "laptop",
+    "colour": "gray",
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-11-07T20:56"
   },
   {
     "id": "test_075",
-    "target_id": "umbrella_0164",
-    "category": "umbrella",
-    "colour": "gray",
+    "target_id": "laptop_0143",
+    "category": "laptop",
+    "colour": "black",
     "location": "Hu Fa Kuang Sports Centre",
-    "lost_time": "2026-10-26T03:00"
+    "lost_time": "2026-11-09T06:51"
   },
   {
     "id": "test_076",
-    "target_id": "umbrella_0165",
-    "category": "umbrella",
+    "target_id": "laptop_0144",
+    "category": "laptop",
     "colour": "yellow",
-    "location": "Run Run Shaw Library",
-    "lost_time": "2026-11-13T12:26"
+    "location": "Student Residence",
+    "lost_time": "2026-10-23T15:31"
   },
   {
     "id": "test_077",
-    "target_id": "umbrella_0166",
-    "category": "umbrella",
-    "colour": "gray",
-    "location": "Lau Ming Wai Academic Building",
-    "lost_time": "2026-11-15T12:30"
+    "target_id": "laptop_0145",
+    "category": "laptop",
+    "colour": "blue",
+    "location": "Student Residence",
+    "lost_time": "2026-11-12T10:37"
   },
   {
     "id": "test_078",
-    "target_id": "umbrella_0167",
-    "category": "umbrella",
+    "target_id": "laptop_0146",
+    "category": "laptop",
     "colour": "gray",
-    "location": "Yeung Kin Man Academic Building",
-    "lost_time": "2026-11-12T12:29"
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-11-01T19:28"
   },
   {
     "id": "test_079",
-    "target_id": "umbrella_0168",
-    "category": "umbrella",
+    "target_id": "laptop_0147",
+    "category": "laptop",
     "colour": "gray",
-    "location": "AC1 Canteen",
-    "lost_time": "2026-11-11T04:43"
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-10-25T17:34"
   },
   {
     "id": "test_080",
-    "target_id": "umbrella_0169",
-    "category": "umbrella",
-    "colour": "white",
-    "location": "Yeung Kin Man Academic Building",
-    "lost_time": "2026-11-03T09:40"
+    "target_id": "laptop_0148",
+    "category": "laptop",
+    "colour": "gray",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-10-23T14:14"
   },
   {
     "id": "test_081",
-    "target_id": "umbrella_0170",
-    "category": "umbrella",
-    "colour": "blue",
-    "location": "AC2 Canteen",
-    "lost_time": "2026-11-04T08:17"
+    "target_id": "laptop_0149",
+    "category": "laptop",
+    "colour": "gray",
+    "location": "Hu Fa Kuang Sports Centre",
+    "lost_time": "2026-10-22T09:53"
   },
   {
     "id": "test_082",
-    "target_id": "umbrella_0171",
-    "category": "umbrella",
+    "target_id": "laptop_0150",
+    "category": "laptop",
     "colour": "black",
-    "location": "Li Dak Sum Yip Yio Chin Academic Building",
-    "lost_time": "2026-10-19T10:19"
+    "location": "Bank of China Complex",
+    "lost_time": "2026-11-06T00:52"
   },
   {
     "id": "test_083",
-    "target_id": "umbrella_0172",
-    "category": "umbrella",
+    "target_id": "laptop_0151",
+    "category": "laptop",
+    "colour": "blue",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-11-11T23:27"
+  },
+  {
+    "id": "test_084",
+    "target_id": "laptop_0152",
+    "category": "laptop",
+    "colour": "pink",
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-10-30T09:54"
+  },
+  {
+    "id": "test_085",
+    "target_id": "laptop_0153",
+    "category": "laptop",
+    "colour": "blue",
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-11-07T11:44"
+  },
+  {
+    "id": "test_086",
+    "target_id": "laptop_0154",
+    "category": "laptop",
+    "colour": "blue",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-10-27T01:42"
+  },
+  {
+    "id": "test_087",
+    "target_id": "laptop_0155",
+    "category": "laptop",
+    "colour": "black",
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-10-31T08:54"
+  },
+  {
+    "id": "test_088",
+    "target_id": "laptop_0156",
+    "category": "laptop",
     "colour": "gray",
-    "location": "Student Residence Halls",
-    "lost_time": "2026-10-27T21:02"
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-11-09T07:39"
+  },
+  {
+    "id": "test_089",
+    "target_id": "laptop_0157",
+    "category": "laptop",
+    "colour": "black",
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-10-30T18:46"
+  },
+  {
+    "id": "test_090",
+    "target_id": "laptop_0158",
+    "category": "laptop",
+    "colour": "black",
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-11-10T23:38"
+  },
+  {
+    "id": "test_091",
+    "target_id": "laptop_0159",
+    "category": "laptop",
+    "colour": "gray",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-10-31T15:17"
+  },
+  {
+    "id": "test_092",
+    "target_id": "laptop_0160",
+    "category": "laptop",
+    "colour": "blue",
+    "location": "Bank of China Complex",
+    "lost_time": "2026-10-20T08:15"
+  },
+  {
+    "id": "test_093",
+    "target_id": "laptop_0161",
+    "category": "laptop",
+    "colour": "white",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-10-21T11:38"
+  },
+  {
+    "id": "test_094",
+    "target_id": "laptop_0162",
+    "category": "laptop",
+    "colour": "black",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-10-19T18:48"
+  },
+  {
+    "id": "test_095",
+    "target_id": "laptop_0163",
+    "category": "laptop",
+    "colour": "blue",
+    "location": "Student Residence",
+    "lost_time": "2026-11-11T09:42"
+  },
+  {
+    "id": "test_096",
+    "target_id": "laptop_0164",
+    "category": "laptop",
+    "colour": "gray",
+    "location": "Student Residence",
+    "lost_time": "2026-10-23T21:29"
+  },
+  {
+    "id": "test_097",
+    "target_id": "laptop_0165",
+    "category": "laptop",
+    "colour": "blue",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-11-05T16:47"
+  },
+  {
+    "id": "test_098",
+    "target_id": "laptop_0166",
+    "category": "laptop",
+    "colour": "white",
+    "location": "Student Residence",
+    "lost_time": "2026-11-07T11:25"
+  },
+  {
+    "id": "test_099",
+    "target_id": "laptop_0167",
+    "category": "laptop",
+    "colour": "gray",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-11-08T05:53"
+  },
+  {
+    "id": "test_100",
+    "target_id": "laptop_0168",
+    "category": "laptop",
+    "colour": "gray",
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-10-31T22:15"
+  },
+  {
+    "id": "test_101",
+    "target_id": "laptop_0169",
+    "category": "laptop",
+    "colour": "blue",
+    "location": "Student Residence",
+    "lost_time": "2026-10-21T08:50"
+  },
+  {
+    "id": "test_102",
+    "target_id": "laptop_0170",
+    "category": "laptop",
+    "colour": "gray",
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-11-02T09:38"
+  },
+  {
+    "id": "test_103",
+    "target_id": "laptop_0171",
+    "category": "laptop",
+    "colour": "blue",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-10-26T04:29"
+  },
+  {
+    "id": "test_104",
+    "target_id": "laptop_0172",
+    "category": "laptop",
+    "colour": "yellow",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-11-15T09:25"
+  },
+  {
+    "id": "test_105",
+    "target_id": "laptop_0173",
+    "category": "laptop",
+    "colour": "white",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-11-11T13:07"
+  },
+  {
+    "id": "test_106",
+    "target_id": "laptop_0174",
+    "category": "laptop",
+    "colour": "gray",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-11-11T00:00"
+  },
+  {
+    "id": "test_107",
+    "target_id": "laptop_0175",
+    "category": "laptop",
+    "colour": "gray",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-10-26T08:16"
+  },
+  {
+    "id": "test_108",
+    "target_id": "laptop_0176",
+    "category": "laptop",
+    "colour": "blue",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-11-12T00:57"
+  },
+  {
+    "id": "test_109",
+    "target_id": "laptop_0177",
+    "category": "laptop",
+    "colour": "white",
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-11-16T03:34"
+  },
+  {
+    "id": "test_110",
+    "target_id": "laptop_0178",
+    "category": "laptop",
+    "colour": "blue",
+    "location": "Hu Fa Kuang Sports Centre",
+    "lost_time": "2026-10-20T03:40"
+  },
+  {
+    "id": "test_111",
+    "target_id": "laptop_0179",
+    "category": "laptop",
+    "colour": "orange",
+    "location": "Student Residence",
+    "lost_time": "2026-10-23T07:24"
+  },
+  {
+    "id": "test_112",
+    "target_id": "laptop_0180",
+    "category": "laptop",
+    "colour": "blue",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-10-29T19:10"
+  },
+  {
+    "id": "test_113",
+    "target_id": "watch_0137",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-10-29T19:17"
+  },
+  {
+    "id": "test_114",
+    "target_id": "watch_0138",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-11-05T03:29"
+  },
+  {
+    "id": "test_115",
+    "target_id": "watch_0139",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Hu Fa Kuang Sports Centre",
+    "lost_time": "2026-10-30T23:45"
+  },
+  {
+    "id": "test_116",
+    "target_id": "watch_0140",
+    "category": "watch",
+    "colour": "black",
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-10-26T13:26"
+  },
+  {
+    "id": "test_117",
+    "target_id": "watch_0141",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Student Residence",
+    "lost_time": "2026-10-21T14:15"
+  },
+  {
+    "id": "test_118",
+    "target_id": "watch_0142",
+    "category": "watch",
+    "colour": "brown",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-11-10T02:14"
+  },
+  {
+    "id": "test_119",
+    "target_id": "watch_0143",
+    "category": "watch",
+    "colour": "orange",
+    "location": "Hu Fa Kuang Sports Centre",
+    "lost_time": "2026-11-10T07:58"
+  },
+  {
+    "id": "test_120",
+    "target_id": "watch_0144",
+    "category": "watch",
+    "colour": "black",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-11-06T04:55"
+  },
+  {
+    "id": "test_121",
+    "target_id": "watch_0145",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Bank of China Complex",
+    "lost_time": "2026-11-10T05:17"
+  },
+  {
+    "id": "test_122",
+    "target_id": "watch_0146",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Student Residence",
+    "lost_time": "2026-11-05T05:34"
+  },
+  {
+    "id": "test_123",
+    "target_id": "watch_0147",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-10-29T17:47"
+  },
+  {
+    "id": "test_124",
+    "target_id": "watch_0148",
+    "category": "watch",
+    "colour": "black",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-10-25T16:49"
+  },
+  {
+    "id": "test_125",
+    "target_id": "watch_0149",
+    "category": "watch",
+    "colour": "black",
+    "location": "Hu Fa Kuang Sports Centre",
+    "lost_time": "2026-11-13T04:31"
+  },
+  {
+    "id": "test_126",
+    "target_id": "watch_0150",
+    "category": "watch",
+    "colour": "black",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-10-29T10:59"
+  },
+  {
+    "id": "test_127",
+    "target_id": "watch_0151",
+    "category": "watch",
+    "colour": "black",
+    "location": "Bank of China Complex",
+    "lost_time": "2026-10-27T09:14"
+  },
+  {
+    "id": "test_128",
+    "target_id": "watch_0152",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-11-03T05:18"
+  },
+  {
+    "id": "test_129",
+    "target_id": "watch_0153",
+    "category": "watch",
+    "colour": "blue",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-10-31T14:15"
+  },
+  {
+    "id": "test_130",
+    "target_id": "watch_0154",
+    "category": "watch",
+    "colour": "black",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-11-03T18:20"
+  },
+  {
+    "id": "test_131",
+    "target_id": "watch_0155",
+    "category": "watch",
+    "colour": "black",
+    "location": "Run Run Shaw Creative Media Centre",
+    "lost_time": "2026-10-30T04:35"
+  },
+  {
+    "id": "test_132",
+    "target_id": "watch_0156",
+    "category": "watch",
+    "colour": "black",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-11-12T09:28"
+  },
+  {
+    "id": "test_133",
+    "target_id": "watch_0157",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-10-31T00:59"
+  },
+  {
+    "id": "test_134",
+    "target_id": "watch_0158",
+    "category": "watch",
+    "colour": "black",
+    "location": "Student Residence",
+    "lost_time": "2026-10-20T10:30"
+  },
+  {
+    "id": "test_135",
+    "target_id": "watch_0159",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Bank of China Complex",
+    "lost_time": "2026-11-02T09:21"
+  },
+  {
+    "id": "test_136",
+    "target_id": "watch_0160",
+    "category": "watch",
+    "colour": "black",
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-10-22T15:25"
+  },
+  {
+    "id": "test_137",
+    "target_id": "watch_0161",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-10-31T03:06"
+  },
+  {
+    "id": "test_138",
+    "target_id": "watch_0162",
+    "category": "watch",
+    "colour": "blue",
+    "location": "Lau Ming Wai Academic Building (AC3)",
+    "lost_time": "2026-10-22T21:00"
+  },
+  {
+    "id": "test_139",
+    "target_id": "watch_0163",
+    "category": "watch",
+    "colour": "blue",
+    "location": "Student Residence",
+    "lost_time": "2026-11-07T16:08"
+  },
+  {
+    "id": "test_140",
+    "target_id": "watch_0164",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-10-21T04:31"
+  },
+  {
+    "id": "test_141",
+    "target_id": "watch_0165",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-10-26T22:27"
+  },
+  {
+    "id": "test_142",
+    "target_id": "watch_0166",
+    "category": "watch",
+    "colour": "black",
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-11-15T15:02"
+  },
+  {
+    "id": "test_143",
+    "target_id": "watch_0167",
+    "category": "watch",
+    "colour": "black",
+    "location": "Run Run Shaw Library",
+    "lost_time": "2026-11-15T05:52"
+  },
+  {
+    "id": "test_144",
+    "target_id": "watch_0168",
+    "category": "watch",
+    "colour": "blue",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-11-15T19:37"
+  },
+  {
+    "id": "test_145",
+    "target_id": "watch_0169",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Bank of China Complex",
+    "lost_time": "2026-10-30T23:04"
+  },
+  {
+    "id": "test_146",
+    "target_id": "watch_0170",
+    "category": "watch",
+    "colour": "black",
+    "location": "Yeung Kin Man Academic Building (AC1)",
+    "lost_time": "2026-10-20T07:15"
+  },
+  {
+    "id": "test_147",
+    "target_id": "watch_0171",
+    "category": "watch",
+    "colour": "black",
+    "location": "Li Dak Sum Yip Yio Chin Academic Building (AC2)",
+    "lost_time": "2026-10-23T03:36"
+  },
+  {
+    "id": "test_148",
+    "target_id": "watch_0172",
+    "category": "watch",
+    "colour": "gray",
+    "location": "Hu Fa Kuang Sports Centre",
+    "lost_time": "2026-10-26T01:13"
   }
 ]

@@ -2,6 +2,17 @@
 KEY/
 Water Bottle/
 data/
+headphone/
+headphone2/
+notebook/
+notebook2/
+notebook3/
+notebook4/
+watch/
+digital watch/
+smart watch/
+
+artifacts/retrain.log
 
 # Python
 __pycache__/

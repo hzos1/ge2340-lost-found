@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from pptx import Presentation
@@ -12,9 +13,12 @@ from pptx.oxml.ns import qn
 from pptx.util import Inches, Pt
 from lxml import etree
 
+from src.vision import DISPLAY_CATEGORY
+
 ROOT = Path(__file__).resolve().parents[1]
 FIG = ROOT / "artifacts" / "figures"
 THUMB = ROOT / "artifacts" / "thumbs"
+METRICS = ROOT / "artifacts" / "metrics.json"
 OUT = ROOT / "slides" / "GE2340_Group26_Results.pptx"
 
 W = Inches(13.333)
@@ -71,6 +75,25 @@ def _ensure_run(paragraph):
     return paragraph.add_run()
 
 
+def load_metrics() -> dict:
+    return json.loads(METRICS.read_text(encoding="utf-8"))
+
+
+def pct(value: float) -> str:
+    return f"{value * 100:.1f}%"
+
+
+def signed(value: float) -> str:
+    return f"{value:+.2f}"
+
+
+def short_place(name: str) -> str:
+    if "(" in name:
+        head, rest = name.split("(", 1)
+        return f"{' '.join(head.strip().split()[:3])} ({rest}"
+    return name
+
+
 def heading(slide, title, kicker="Results"):
     add_rect(slide, 0, 0, W, Inches(0.18), PINE)
     textbox(slide, Inches(0.6), Inches(0.28), Inches(12), Inches(0.28), kicker.upper(), 12, True, COPPER)
@@ -120,35 +143,39 @@ def blank():
     return prs, prs.slide_layouts[6]
 
 
-def title_slide(prs, layout):
+def title_slide(prs, layout, metrics):
+    test = metrics["test"]
     slide = prs.slides.add_slide(layout)
     add_rect(slide, 0, 0, W, H, PINE)
     add_rect(slide, 0, Inches(5.9), W, Inches(1.6), RGBColor(0x0E, 0x2C, 0x28))
     textbox(slide, Inches(0.8), Inches(1.3), Inches(11), Inches(0.4), "GE2340  ·  GROUP 26  ·  CITYUHK", 14, True, RGBColor(0xD7, 0xC4, 0xA4))
     textbox(slide, Inches(0.8), Inches(1.85), Inches(11.5), Inches(1.8), "Lost-and-Found\nImage/Text Matcher", 48, True, WHITE, font="Georgia")
     textbox(slide, Inches(0.8), Inches(4.0), Inches(11), Inches(0.5), "Held-out retrieval results", 22, False, RGBColor(0xD9, 0xE4, 0xDF))
+    names = "  ·  ".join(member["name"] for member in metrics["group"]["members"])
     textbox(
         slide,
         Inches(0.8),
         Inches(6.15),
         Inches(11),
         Inches(0.9),
-        "So Shing Hin  ·  Tu Kwan Yiu  ·  Chan Kai Shun\n84 test queries  ·  168 found records  ·  success = correct item in the top 5",
+        f"{names}\n{test['n_queries']} test queries  ·  {test['gallery_size']} found records  ·  success = correct item in the top 5",
         16,
         False,
         RGBColor(0xD9, 0xE4, 0xDF),
     )
 
 
-def setup_slide(prs, layout, page, total):
+def setup_slide(prs, layout, page, total, metrics):
+    test = metrics["test"]
+    n_classes = len(metrics["dataset"]["by_category"])
     slide = prs.slides.add_slide(layout)
     add_rect(slide, 0, 0, W, H, CREAM)
     heading(slide, "How we scored the system")
     cards = [
-        ("84", "lost queries on the test split"),
-        ("168", "found records never used to train the heads"),
+        (str(test["n_queries"]), "lost queries on the test split"),
+        (str(test["gallery_size"]), "found records never used to train the heads"),
         ("Top 5", "counts as a hit, as in the proposal"),
-        ("3 classes", "keys, umbrellas, water bottles"),
+        (f"{n_classes} classes", "keys, bottles, earphones, laptops, watches"),
     ]
     for i, (value, label) in enumerate(cards):
         left = Inches(0.6 + i * 3.15)
@@ -168,15 +195,21 @@ def setup_slide(prs, layout, page, total):
     footer(slide, page, total)
 
 
-def headline_slide(prs, layout, page, total):
+def headline_slide(prs, layout, page, total, metrics):
+    methods = metrics["test"]["methods"]
+    cnn = methods["cnn_linear"]
+    fusion = methods["clip_fusion"]
+    visual = methods["clip_visual"]
+    random = methods["random"]
+    oracle = methods["metadata_oracle"]
     slide = prs.slides.add_slide(layout)
     add_rect(slide, 0, 0, W, H, CREAM)
     heading(slide, "Headline numbers on the test set")
     big = [
-        ("94.0%", "CNN + linear", "Recall@5", COPPER),
-        ("77.4%", "CLIP + place + time", "Recall@5", PINE2),
-        ("13.1%", "CLIP visual only", "Recall@5", RGBColor(0x3A, 0x7A, 0x82)),
-        ("3.0%", "Random ranking", "Recall@5", MUTED),
+        (pct(cnn["recall_at_5"]), "CNN + linear", "Recall@5", COPPER),
+        (pct(fusion["recall_at_5"]), "CLIP + place + time", "Recall@5", PINE2),
+        (pct(visual["recall_at_5"]), "CLIP visual only", "Recall@5", RGBColor(0x3A, 0x7A, 0x82)),
+        (pct(random["recall_at_5"]), "Random ranking", "Recall@5", MUTED),
     ]
     for i, (value, name, metric, color) in enumerate(big):
         left = Inches(0.6 + i * 3.15)
@@ -187,9 +220,9 @@ def headline_slide(prs, layout, page, total):
     add_round(slide, Inches(0.6), Inches(4.05), Inches(12.1), Inches(2.7), WHITE)
     textbox(slide, Inches(0.9), Inches(4.25), Inches(11.5), Inches(0.4), "What this means", 16, True, PINE)
     notes = [
-        "Place and time lift CLIP from 13.1% to 77.4%. Many photos share a colour name, so the short text prompt cannot pick one record by itself.",
-        "The linear matcher is ahead of CLIP here, and close to an oracle that already knows the true category and colour (95.2%).",
-        "Median rank is 2 for both matchers. Random ranking has a median rank of 84.5.",
+        f"Place and time lift CLIP from {pct(visual['recall_at_5'])} to {pct(fusion['recall_at_5'])}. Many photos share a colour name, so the short text prompt cannot pick one record by itself.",
+        f"The linear matcher is ahead of CLIP here, and close to an oracle that already knows the true category and colour ({pct(oracle['recall_at_5'])}).",
+        f"Median rank is {cnn['median_rank']:.0f} for both matchers. Random ranking has a median rank of {random['median_rank']:.1f}.",
     ]
     top = Inches(4.75)
     for line in notes:
@@ -198,17 +231,23 @@ def headline_slide(prs, layout, page, total):
     footer(slide, page, total)
 
 
-def table_slide(prs, layout, page, total):
+def table_slide(prs, layout, page, total, metrics):
+    methods = metrics["test"]["methods"]
+
+    def row(name, key):
+        item = methods[key]
+        return [name, pct(item["recall_at_1"]), pct(item["recall_at_5"]), f"{item['mrr']:.3f}", f"{item['median_rank']:.1f}"]
+
     slide = prs.slides.add_slide(layout)
     add_rect(slide, 0, 0, W, H, CREAM)
     heading(slide, "Full retrieval table")
     rows = [
         ["Method", "Recall@1", "Recall@5", "MRR", "Median rank"],
-        ["CNN + linear", "48.8%", "94.0%", "0.663", "2.0"],
-        ["CLIP + place + time", "41.7%", "77.4%", "0.571", "2.0"],
-        ["True category and colour", "83.3%", "95.2%", "0.887", "1.0"],
-        ["CLIP visual only", "4.8%", "13.1%", "0.117", "24.0"],
-        ["Random ranking", "0.6%", "3.0%", "0.034", "84.5"],
+        row("CNN + linear", "cnn_linear"),
+        row("CLIP + place + time", "clip_fusion"),
+        row("True category and colour", "metadata_oracle"),
+        row("CLIP visual only", "clip_visual"),
+        row("Random ranking", "random"),
     ]
     table = slide.shapes.add_table(len(rows), 5, Inches(0.8), Inches(1.5), Inches(11.7), Inches(4.2)).table
     widths = [Inches(3.6), Inches(2.0), Inches(2.0), Inches(2.0), Inches(2.1)]
@@ -245,7 +284,8 @@ def chart_slide(prs, layout, page, total, title, image, caption):
     footer(slide, page, total)
 
 
-def weights_slide(prs, layout, page, total):
+def weights_slide(prs, layout, page, total, metrics):
+    coef = metrics["linear_model"]["coefficients"]
     slide = prs.slides.add_slide(layout)
     add_rect(slide, 0, 0, W, H, CREAM)
     heading(slide, "Why the linear matcher is easy to read")
@@ -253,20 +293,29 @@ def weights_slide(prs, layout, page, total):
     add_round(slide, Inches(8.1), Inches(1.45), Inches(4.6), Inches(5.2), WHITE)
     textbox(slide, Inches(8.35), Inches(1.65), Inches(4.15), Inches(0.4), "Learned pair features", 16, True, PINE)
     facts = [
-        ("+3.48", "Category match raises the probability."),
-        ("+0.46", "Colour match helps, but less. Colour labels are noisy."),
-        ("−3.15", "A farther campus place lowers the score."),
-        ("−6.31", "A larger time gap lowers the score the most."),
+        (signed(coef["category_match"]), "Category match raises the probability."),
+        (signed(coef["colour_match"]), "Colour match helps, but less. Colour labels are noisy."),
+        (signed(coef["location_distance"]), "A farther campus place lowers the score."),
+        (signed(coef["time_difference"]), "A larger time gap lowers the score the most."),
     ]
     top = Inches(2.2)
     for value, line in facts:
-        textbox(slide, Inches(8.35), top, Inches(4.15), Inches(0.4), value, 20, True, PINE2 if value.startswith("+") else CLAY, font="Georgia")
+        display = value.replace("-", "−")
+        textbox(slide, Inches(8.35), top, Inches(4.15), Inches(0.4), display, 20, True, PINE2 if value.startswith("+") else CLAY, font="Georgia")
         textbox(slide, Inches(8.35), top + Inches(0.38), Inches(4.15), Inches(0.55), line, 14, False, INK)
         top += Inches(1.05)
     footer(slide, page, total)
 
 
-def classify_slide(prs, layout, page, total):
+def classify_slide(prs, layout, page, total, metrics):
+    test_cls = metrics["classification"]["test"]
+    labels = metrics["classification"]["confusion_category"]["labels"]
+    matrix = metrics["classification"]["confusion_category"]["matrix"]
+    key_idx = labels.index("key")
+    key_row = matrix[key_idx]
+    key_total = sum(key_row)
+    key_wrong = key_total - key_row[key_idx]
+    wrong_label = labels[int(max(range(len(key_row)), key=lambda i: key_row[i] if i != key_idx else -1))]
     slide = prs.slides.add_slide(layout)
     add_rect(slide, 0, 0, W, H, CREAM)
     heading(slide, "Category is easy. Colour is not.")
@@ -274,10 +323,10 @@ def classify_slide(prs, layout, page, total):
     add_round(slide, Inches(7.3), Inches(1.45), Inches(5.4), Inches(5.2), WHITE)
     textbox(slide, Inches(7.55), Inches(1.7), Inches(5.0), Inches(0.4), "Held-out photo labels", 16, True, PINE)
     stats = [
-        ("96.4%", "Category softmax accuracy"),
-        ("59.5%", "Colour softmax accuracy"),
-        ("100%", "Umbrella photos labelled correctly"),
-        ("1 / 12", "Keys confused with a water bottle"),
+        (pct(test_cls["category_accuracy"]), "Category softmax accuracy"),
+        (pct(test_cls["colour_accuracy"]), "Colour softmax accuracy"),
+        (pct(test_cls["category_recall"]["laptop"]), "Laptop photos labelled correctly"),
+        (f"{key_wrong} / {key_total}", f"Keys confused with an {wrong_label}"),
     ]
     top = Inches(2.3)
     for value, label in stats:
@@ -287,17 +336,17 @@ def classify_slide(prs, layout, page, total):
     footer(slide, page, total)
 
 
-def cases_slide(prs, layout, page, total):
+def cases_slide(prs, layout, page, total, metrics):
     slide = prs.slides.add_slide(layout)
     add_rect(slide, 0, 0, W, H, CREAM)
     heading(slide, "CLIP + place + time: three hits, one miss")
-    cases = [
-        ("Hit · rank 1", "Gray water bottle", "Student Residence Halls", "bottle_0141", True),
-        ("Hit · rank 1", "Black key", "Li Dak Sum Yip Yio Chin", "key_0061", True),
-        ("Hit · rank 1", "Gray umbrella", "Lau Ming Wai", "umbrella_0139", True),
-        ("Miss · rank 54", "Gray umbrella", "Bank of China Complex", "umbrella_0143", False),
-    ]
-    for i, (status, name, place, item_id, hit) in enumerate(cases):
+    for i, case in enumerate(metrics["cases"][:4]):
+        query = case["query"]
+        hit = case["hit_at_5"]
+        status = f"{'Hit' if hit else 'Miss'} · rank {case['rank']}"
+        name = f"{query['colour'].title()} {DISPLAY_CATEGORY[query['category']]}"
+        place = short_place(query["location"])
+        item_id = query["target_id"]
         left = Inches(0.5 + i * 3.2)
         add_round(slide, left, Inches(1.4), Inches(3.0), Inches(5.25), WHITE)
         photo = THUMB / f"{item_id}.jpg"
@@ -310,15 +359,30 @@ def cases_slide(prs, layout, page, total):
     footer(slide, page, total)
 
 
-def takeaway_slide(prs, layout, page, total):
+def takeaway_slide(prs, layout, page, total, metrics):
+    methods = metrics["test"]["methods"]
+    fusion_w = metrics["fusion_weights"]
+    cls = metrics["classification"]["test"]
     slide = prs.slides.add_slide(layout)
     add_rect(slide, 0, 0, W, H, CREAM)
     heading(slide, "Takeaways for the report")
     items = [
-        ("CLIP needs place and time", "Visual similarity alone is 13.1% Recall@5. Fusion weights chosen on validation are 0.45 visual, 0.25 place, 0.30 time."),
-        ("The linear model wins on this split", "Once the photo is reduced to category and colour, learned weights can lean on campus place and time. That decision is easy to explain."),
-        ("Colour remains the weak label", "Category accuracy is 96.4%. Colour accuracy is 59.5%. Outdoor umbrellas and synthetic bottles make similar items hard to split."),
-        ("Scope of the data", "Keys, umbrellas, and water bottles from the public sets named in the proposal. Phones, cables, earphones, and computers were not in the collected folders."),
+        (
+            "CLIP needs place and time",
+            f"Visual similarity alone is {pct(methods['clip_visual']['recall_at_5'])} Recall@5. Fusion weights chosen on validation are {fusion_w['visual']:.2f} visual, {fusion_w['location']:.2f} place, and {fusion_w['time']:.2f} time.",
+        ),
+        (
+            "The linear model wins on this split",
+            "Once the photo is reduced to category and colour, learned weights can lean on campus place and time. That decision is easy to explain.",
+        ),
+        (
+            "Colour remains the weak label",
+            f"Category accuracy is {pct(cls['category_accuracy'])}. Colour accuracy is {pct(cls['colour_accuracy'])}. Synthetic bottles make similar items hard to split.",
+        ),
+        (
+            "Scope of the data",
+            "Keys, water bottles, earphones, laptops, and watches are in this split. Phones and charging cables from the proposal are still missing.",
+        ),
     ]
     for i, (title, body) in enumerate(items):
         col = i % 2
@@ -338,7 +402,7 @@ def limits_slide(prs, layout, page, total):
     limits = [
         "Campus place and time are simulated. They help ranking, but they are not real lost-and-found logs.",
         "Similar objects of the same colour stay hard to tell apart from a short phrase.",
-        "Bottle images are synthetic, key photos are few, and umbrella scenes are uncontrolled.",
+        "Bottle images are synthetic, and key photos are few.",
         "The system runs on a local computer. ID cards, student cards, and faces are out of scope.",
         "Live demo: the web app at http://127.0.0.1:8765 shows matching and the found inventory, not these slides.",
     ]
@@ -353,12 +417,13 @@ def limits_slide(prs, layout, page, total):
 
 def main() -> None:
     OUT.parent.mkdir(parents=True, exist_ok=True)
+    metrics = load_metrics()
     prs, layout = blank()
     total = 11
-    title_slide(prs, layout)
-    setup_slide(prs, layout, 2, total)
-    headline_slide(prs, layout, 3, total)
-    table_slide(prs, layout, 4, total)
+    title_slide(prs, layout, metrics)
+    setup_slide(prs, layout, 2, total, metrics)
+    headline_slide(prs, layout, 3, total, metrics)
+    table_slide(prs, layout, 4, total, metrics)
     chart_slide(
         prs,
         layout,
@@ -375,12 +440,12 @@ def main() -> None:
         total,
         "The same test, split by item type",
         FIG / "recall_by_category.png",
-        "Keys are easy for every matcher. Umbrellas are where CLIP falls behind the linear model.",
+        "Earphones, laptops, and watches now sit in the same evaluation. CLIP still leans on place and time; the linear matcher stays ahead on Recall@5.",
     )
-    weights_slide(prs, layout, 7, total)
-    classify_slide(prs, layout, 8, total)
-    cases_slide(prs, layout, 9, total)
-    takeaway_slide(prs, layout, 10, total)
+    weights_slide(prs, layout, 7, total, metrics)
+    classify_slide(prs, layout, 8, total, metrics)
+    cases_slide(prs, layout, 9, total, metrics)
+    takeaway_slide(prs, layout, 10, total, metrics)
     limits_slide(prs, layout, 11, total)
     prs.save(OUT)
     print(f"Wrote {OUT}", flush=True)

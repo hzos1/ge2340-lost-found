@@ -25,12 +25,14 @@ COLOURS = [
     "pink",
 ]
 
-CATEGORIES = ["key", "umbrella", "bottle"]
+CATEGORIES = ["key", "bottle", "earphone", "laptop", "watch"]
 
 DISPLAY_CATEGORY = {
     "key": "key",
-    "umbrella": "umbrella",
     "bottle": "water bottle",
+    "earphone": "earphone",
+    "laptop": "laptop",
+    "watch": "watch",
 }
 
 # Reference colours in RGB. Chromatic names are used only when the photo is saturated.

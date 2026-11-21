@@ -40,14 +40,23 @@ from src.vision import (
 ROOT = Path(__file__).resolve().parents[1]
 SEED = 26
 QUOTA = {
-    "umbrella": {"train": 100, "val": 36, "test": 36},
     "bottle": {"train": 100, "val": 36, "test": 36},
     "key": {"train": 48, "val": 12, "test": 12},
+    "earphone": {"train": 70, "val": 25, "test": 25},
+    "laptop": {"train": 100, "val": 40, "test": 40},
+    "watch": {"train": 100, "val": 36, "test": 36},
 }
 SOURCES = {
     "key": "Kaggle Key-Images (Faique Ali, 2024)",
     "bottle": "Kaggle Bottles Synthetic Images (Fih, 2022)",
-    "umbrella": "images.cv Umbrella Image Classification Dataset (2026)",
+    "earphone": "Kaggle headset photos (headphone / headphone2 folders)",
+    "laptop": "Kaggle laptop photos (notebook / notebook2 / notebook3 / notebook4 folders)",
+    "watch": "Kaggle watch photos (watch / digital watch / smart watch folders)",
+}
+FOLDER_SETS = {
+    "earphone": ["headphone", "headphone2"],
+    "laptop": ["notebook", "notebook2", "notebook3", "notebook4"],
+    "watch": ["watch", "digital watch", "smart watch"],
 }
 
 
@@ -63,20 +72,31 @@ def take(paths: list[Path], count: int, rng: np.random.Generator) -> list[Path]:
     raise RuntimeError(f"Needed {count} readable images, found {len(chosen)} in the sampled folders.")
 
 
+def collect_from_folders(folders: list[str], count: int, rng: np.random.Generator) -> list[Path]:
+    paths: list[Path] = []
+    for name in folders:
+        paths.extend(list_images(ROOT / name))
+    return take(paths, count, rng)
+
+
+def split_chosen(category: str, chosen: list[Path]) -> list[tuple[str, str, Path]]:
+    specs: list[tuple[str, str, Path]] = []
+    offset = 0
+    for split in ("train", "val", "test"):
+        count = QUOTA[category][split]
+        specs.extend((category, split, path) for path in chosen[offset : offset + count])
+        offset += count
+    return specs
+
+
 def collect_specs(rng: np.random.Generator) -> list[tuple[str, str, Path]]:
     specs: list[tuple[str, str, Path]] = []
-    umbrella_root = ROOT / "data"
-    for split, count in QUOTA["umbrella"].items():
-        folder = umbrella_root / split / "umbrella"
-        specs.extend(("umbrella", split, path) for path in take(list_images(folder), count, rng))
     for category, folder in (("bottle", ROOT / "Water Bottle"), ("key", ROOT / "KEY")):
-        total = sum(QUOTA[category].values())
-        chosen = take(list_images(folder), total, rng)
-        offset = 0
-        for split in ("train", "val", "test"):
-            count = QUOTA[category][split]
-            specs.extend((category, split, path) for path in chosen[offset : offset + count])
-            offset += count
+        chosen = take(list_images(folder), sum(QUOTA[category].values()), rng)
+        specs.extend(split_chosen(category, chosen))
+    for category, folders in FOLDER_SETS.items():
+        chosen = collect_from_folders(folders, sum(QUOTA[category].values()), rng)
+        specs.extend(split_chosen(category, chosen))
     return specs
 
 
@@ -454,13 +474,14 @@ def write_findings(metrics: dict) -> list[str]:
     lines.append(
         f"On held-out photos, the category softmax reaches {classification['category_accuracy']:.1%} accuracy and "
         f"the colour softmax reaches {classification['colour_accuracy']:.1%}. "
-        "Colour labels come from an automatic dominant-colour reading, so outdoor backgrounds can make the umbrella labels noisy. "
+        "Colour labels come from an automatic dominant-colour reading, so backgrounds can make the labels noisy. "
         "The bottle photos are synthetic product shots, and the key set is small, so similar items remain hard to separate."
     )
     lines.append(
         "Campus place and time are simulated, which matches the data plan in the proposal. "
         "The system runs locally, and the public photos do not include student cards or faces. "
-        "Phones, cables, earphones, and computers from the proposal are not in the collected image folders, so this version covers keys, umbrellas, and water bottles."
+        "This version covers keys, water bottles, earphones, laptops, and watches. "
+        "Phones and charging cables from the proposal are still missing."
     )
     return lines
 
@@ -501,10 +522,10 @@ def save_figures(metrics: dict, figure_dir: Path) -> None:
     fig.savefig(figure_dir / "recall_at_5.png", dpi=150)
     plt.close(fig)
 
-    fig, ax = plt.subplots(figsize=(8.2, 4.4))
+    fig, ax = plt.subplots(figsize=(10.2, 4.6))
     category_labels = [DISPLAY_CATEGORY[category].title() for category in CATEGORIES]
     x = np.arange(len(CATEGORIES))
-    width = 0.25
+    width = 0.24
     series = [
         ("clip_fusion", "CLIP + place + time", "#0f3d3e"),
         ("cnn_linear", "CNN + linear", "#b6402a"),
@@ -540,10 +561,12 @@ def save_figures(metrics: dict, figure_dir: Path) -> None:
     plt.close(fig)
 
     matrix = np.array(metrics["classification"]["confusion_category"]["matrix"], dtype=float)
-    fig, ax = plt.subplots(figsize=(5.2, 4.4))
+    n_labels = len(CATEGORIES)
+    fig, ax = plt.subplots(figsize=(7.2, 6.0))
     image = ax.imshow(matrix, cmap="YlGn")
-    ax.set_xticks(range(3), [DISPLAY_CATEGORY[label].title() for label in CATEGORIES], rotation=20, ha="right")
-    ax.set_yticks(range(3), [DISPLAY_CATEGORY[label].title() for label in CATEGORIES])
+    tick_labels = [DISPLAY_CATEGORY[label].title() for label in CATEGORIES]
+    ax.set_xticks(range(n_labels), tick_labels, rotation=25, ha="right")
+    ax.set_yticks(range(n_labels), tick_labels)
     ax.set_xlabel("Predicted")
     ax.set_ylabel("True category")
     ax.set_title("Category softmax on the test photos")
