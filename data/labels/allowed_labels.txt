@@ -1,0 +1,2 @@
+category: key, computer, charging_cable, earphones, water_bottle
+colour: black, white, blue, red, green, yellow, grey, brown, pink, purple, orange, transparent
