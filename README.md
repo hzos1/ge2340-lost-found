@@ -28,4 +28,3 @@ python -m src.pipeline
 python -m src.make_results_pptx
 ```
 
-Results slides: `slides/GE2340_Group26_Results.pptx`
