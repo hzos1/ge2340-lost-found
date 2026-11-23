@@ -17,7 +17,7 @@ Open http://127.0.0.1:8765
 - **Report a found item** — a photo is required; the matcher looks for a matching lost report
 - **Database** — browse every live record; delete requires the admin password `12345678`
 
-Click a pin on the CityUHK location plan to fill the place field. Yeung Kin Man is AC1, Li is AC2, Lau Ming Wai is AC3.
+
 
 ## Retrain and slides
 
