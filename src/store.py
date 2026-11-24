@@ -91,6 +91,7 @@ class Store:
             "pred_category": record.get("pred_category", record["category"]),
             "pred_category_label": record.get("pred_category_label", record["category_label"]),
             "pred_colour": record.get("pred_colour", record["colour"]),
+            "status": record.get("status", "available"),
         }
         if record["kind"] == "found":
             item["found_time"] = record["found_time"]
@@ -111,13 +112,13 @@ class Store:
 
     def found_for_search(self) -> tuple[list[dict], dict[str, np.ndarray]]:
         with _lock:
-            found = [dict(record) for record in self.records if record["kind"] == "found"]
+            found = [dict(record) for record in self.records if record["kind"] == "found" and record.get("status", "available") != "returned"]
             vectors = {record["id"]: self.clip_by_id[record["id"]] for record in found if record["id"] in self.clip_by_id}
             return found, vectors
 
     def lost_for_search(self) -> tuple[list[dict], dict[str, np.ndarray]]:
         with _lock:
-            lost = [dict(record) for record in self.records if record["kind"] == "lost"]
+            lost = [dict(record) for record in self.records if record["kind"] == "lost" and record.get("status", "available") != "returned"]
             vectors = {record["id"]: self.clip_by_id[record["id"]] for record in lost if record["id"] in self.clip_by_id}
             return lost, vectors
 
@@ -134,6 +135,7 @@ class Store:
         location: str,
         event_time: str,
         note: str = "",
+        contact: str = "",
         image_path: Path | None = None,
         clip_vector=None,
     ) -> dict:
@@ -150,6 +152,9 @@ class Store:
         event_iso = parsed.replace(microsecond=0).isoformat()
         if kind == "found" and image_path is None:
             raise ValueError("A photo is required when reporting a found item.")
+        contact = contact.strip()
+        if kind == "lost" and (len(contact) > 120 or "@" not in contact or "." not in contact.split("@")[-1]):
+            raise ValueError("Enter a valid contact email for the lost report.")
 
         with _lock:
             item_id = self._next_id(kind)
@@ -169,6 +174,8 @@ class Store:
                 "pred_category": category,
                 "pred_category_label": DISPLAY_CATEGORY[category],
                 "pred_colour": colour,
+                "status": "available",
+                "contact": contact,
             }
             if kind == "found":
                 record["found_time"] = event_iso
@@ -188,9 +195,66 @@ class Store:
             self._persist_vectors()
             return self.public(record)
 
-    def delete(self, item_id: str, password: str) -> dict:
+    def request_claim(self, found_id: str, lost_id: str, detail: str) -> dict:
+        detail = detail.strip()
+        if not 10 <= len(detail) <= 300:
+            raise ValueError("Enter 10–300 characters describing a private identifying detail.")
+        with _lock:
+            found = next((r for r in self.records if r["id"] == found_id and r["kind"] == "found"), None)
+            lost = next((r for r in self.records if r["id"] == lost_id and r["kind"] == "lost"), None)
+            if found is None or lost is None:
+                raise ValueError("Both the found item and lost report must exist.")
+            if found.get("status", "available") != "available" or lost.get("status", "available") == "returned":
+                raise ValueError("This item is no longer available for a claim.")
+            found["claim"] = {"lost_id": lost_id, "detail": detail, "requested_at": _now()}
+            found["status"] = "claim_pending"
+            self._persist_records()
+            return self.public(found)
+
+    def list_claims(self, password: str) -> list[dict]:
+        self._check_admin(password)
+        with _lock:
+            claims = []
+            for r in self.records:
+                if r.get("status") != "claim_pending" or not r.get("claim"):
+                    continue
+                lost = next((item for item in self.records if item["id"] == r["claim"]["lost_id"]), None)
+                claims.append(dict(found_id=r["id"], contact=lost.get("contact", "") if lost else "", **r["claim"]))
+            return claims
+
+    def review_claim(self, found_id: str, approve: bool, password: str) -> dict:
+        self._check_admin(password)
+        with _lock:
+            found = next((r for r in self.records if r["id"] == found_id and r["kind"] == "found"), None)
+            if found is None or found.get("status") != "claim_pending" or not found.get("claim"):
+                raise ValueError("No pending claim exists for this item.")
+            lost = next((r for r in self.records if r["id"] == found["claim"]["lost_id"]), None)
+            if approve and lost is None:
+                raise ValueError("The linked lost report no longer exists.")
+            found["status"] = "returned" if approve else "available"
+            if approve:
+                lost["status"] = "returned"
+            found.pop("claim", None)
+            self._persist_records()
+            return self.public(found)
+
+    def set_lost_status(self, lost_id: str, found: bool, password: str) -> dict:
+        self._check_admin(password)
+        with _lock:
+            lost = next((r for r in self.records if r["id"] == lost_id and r["kind"] == "lost"), None)
+            if lost is None:
+                raise ValueError("Lost report not found.")
+            lost["status"] = "returned" if found else "available"
+            self._persist_records()
+            return self.public(lost)
+
+    @staticmethod
+    def _check_admin(password: str) -> None:
         if not hmac.compare_digest(str(password or ""), ADMIN_PASSWORD):
             raise PermissionError("Wrong admin password.")
+
+    def delete(self, item_id: str, password: str) -> dict:
+        self._check_admin(password)
         with _lock:
             index = next((i for i, record in enumerate(self.records) if record["id"] == item_id), None)
             if index is None:
