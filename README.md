@@ -2,7 +2,7 @@
 
 CityUHK campus matcher for lost and found reports. CLIP (ViT-B/32, no fine-tuning) is the preferred method from the proposal. A frozen MobileNetV3 + linear pair classifier is the comparison method.
 
-The web app stores live records only. Training photos stay on the machine that trained the model.
+The web app stores records locally in `app/data/`. On its first run, it imports the held-out test gallery and synthetic test queries as clearly labelled demo records (298 found items and 149 lost reports). New uploads are saved in the same database and ranked with the trained matcher; uploads do not retrain the model.
 
 ## Run the demo
 
@@ -10,6 +10,8 @@ The web app stores live records only. Training photos stay on the machine that t
 pip install -r requirements.txt
 python app/server.py
 ```
+
+On Windows, you can also double-click `Open Web App Windows.bat`. On macOS, open `Open Web App Mac.command` in Terminal.
 
 Open http://127.0.0.1:8765
 

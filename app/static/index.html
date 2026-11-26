@@ -36,7 +36,7 @@
           <form class="panel" id="lost-form">
             <p class="kicker">Lost report</p>
             <h2>I lost something</h2>
-            <p class="hint">Save a lost report, then match it against found items that people have already uploaded. Training photos are not in this database.</p>
+            <p class="hint">Save a lost report, then match it against found items in the database. The starter database includes clearly labelled test examples; new uploads are added and matched with the trained model.</p>
             <div class="grid" id="lost-fields"></div>
             <div class="actions">
               <button class="primary" id="lost-btn" type="submit">Save and find matches</button>
@@ -71,7 +71,7 @@
           <form class="panel" id="found-form">
             <p class="kicker">Found item</p>
             <h2>I found something</h2>
-            <p class="hint">A photo is required. The matcher stores the CLIP embedding of that photo and looks for a matching lost report.</p>
+            <p class="hint">A photo is required. The matcher stores its CLIP embedding, adds the item to the database, and ranks possible lost reports with the trained model.</p>
             <div class="grid" id="found-fields"></div>
             <div class="actions">
               <button class="primary" id="found-btn" type="submit">Save found item</button>
@@ -105,7 +105,7 @@
           <div>
             <p class="kicker">Live database</p>
             <h2>All lost and found records</h2>
-            <p class="hint">Anyone can browse the live database. Only an admin with the staff password can delete a record.</p>
+            <p class="hint">The database starts with held-out test examples marked as demo data. New reports are saved here and used by the matcher. Only an admin can delete a record.</p>
           </div>
           <label>Admin password
             <input id="admin-password" type="password" autocomplete="off" placeholder="Required to delete" />
@@ -120,7 +120,7 @@
         <p class="quiet" id="records-count"></p>
         <div class="inventory" id="records"></div>
       </section>
-      <p class="foot">Group 26 · Lost-and-Found Image/Text Matcher · Live records are stored separately from the training photos used to build CLIP and the CNN heads.</p>
+      <p class="foot">Group 26 · Lost-and-Found Image/Text Matcher · Demo examples are synthetic test records. New reports and photo embeddings are saved in the local app database.</p>
     </main>
   </div>
   <script src="/static/app.js"></script>

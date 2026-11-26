@@ -13,6 +13,7 @@ app/data/photos/*
 !app/data/photos/.gitkeep
 app/data/vectors.npz
 app/data/records.json
+app/data/.test_dataset_seeded
 app/data/*.tmp.npz
 
 # Debug overlay, not the real campus map
