@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import hmac
 import json
+import shutil
 import threading
 from datetime import datetime
 from pathlib import Path
@@ -21,6 +22,7 @@ DATA = ROOT / "app" / "data"
 RECORDS_PATH = DATA / "records.json"
 PHOTOS = DATA / "photos"
 VECTORS_PATH = DATA / "vectors.npz"
+DEMO_SEED_PATH = DATA / ".test_dataset_seeded"
 ADMIN_PASSWORD = "12345678"
 
 _lock = threading.Lock()
@@ -50,6 +52,102 @@ class Store:
             ids = [str(item) for item in arrays["ids"].tolist()]
             for item_id, vector in zip(ids, arrays["clip"]):
                 self.clip_by_id[item_id] = np.asarray(vector, dtype=np.float32)
+        if not DEMO_SEED_PATH.exists():
+            if self.records:
+                DEMO_SEED_PATH.write_text("existing database preserved\n", encoding="utf-8")
+            else:
+                self._seed_test_dataset()
+
+    def _seed_test_dataset(self) -> None:
+        """Load the held-out gallery and synthetic test queries as demo records once."""
+        art = ROOT / "artifacts"
+        gallery_path = art / "gallery.json"
+        queries_path = art / "queries_test.json"
+        embeddings_path = art / "embeddings.npz"
+        if not all(path.is_file() for path in (gallery_path, queries_path, embeddings_path)):
+            return
+
+        gallery = json.loads(gallery_path.read_text(encoding="utf-8"))
+        queries = json.loads(queries_path.read_text(encoding="utf-8"))
+        arrays = np.load(embeddings_path)
+        source_vectors = {
+            str(item_id): np.asarray(vector, dtype=np.float32)
+            for item_id, vector in zip(arrays["ids"].tolist(), arrays["clip"])
+        }
+        found_id_by_source: dict[str, str] = {}
+        seeded: list[dict] = []
+        category_labels = {
+            source["category"]: source["category_label"] for source in gallery
+        }
+
+        for index, source in enumerate(gallery, start=1):
+            item_id = f"found_{index:04d}"
+            source_id = source["id"]
+            found_id_by_source[source_id] = item_id
+            place = PLACE_BY_NAME[source["location"]]
+            photo_source = art / "thumbs" / f"{source_id}.jpg"
+            has_photo = photo_source.is_file()
+            if has_photo:
+                shutil.copyfile(photo_source, PHOTOS / f"{item_id}.jpg")
+            seeded.append({
+                "id": item_id,
+                "kind": "found",
+                "category": source["category"],
+                "category_label": source["category_label"],
+                "colour": source["colour"],
+                "location": place["name"],
+                "location_id": place["id"],
+                "x": place["x"],
+                "y": place["y"],
+                "note": "Demo record from the held-out test dataset.",
+                "has_photo": has_photo,
+                "created_at": source["found_time"],
+                "found_time": source["found_time"],
+                "pred_category": source.get("pred_category", source["category"]),
+                "pred_category_label": source.get("pred_category_label", source["category_label"]),
+                "pred_colour": source.get("pred_colour", source["colour"]),
+                "status": "available",
+                "contact": "demo@example.com",
+            })
+            vector = source_vectors.get(source_id)
+            if vector is not None:
+                norm = float(np.linalg.norm(vector))
+                if norm >= 1e-8:
+                    self.clip_by_id[item_id] = vector / norm
+
+        for index, query in enumerate(queries, start=1):
+            item_id = f"lost_{index:04d}"
+            place = PLACE_BY_NAME[query["location"]]
+            seeded.append({
+                "id": item_id,
+                "kind": "lost",
+                "category": query["category"],
+                "category_label": category_labels[query["category"]],
+                "colour": query["colour"],
+                "location": place["name"],
+                "location_id": place["id"],
+                "x": place["x"],
+                "y": place["y"],
+                "note": "Demo synthetic lost report from the held-out test dataset.",
+                "has_photo": False,
+                "created_at": query["lost_time"],
+                "lost_time": query["lost_time"],
+                "pred_category": query["category"],
+                "pred_category_label": category_labels[query["category"]],
+                "pred_colour": query["colour"],
+                "status": "available",
+                "contact": "demo@example.com",
+                "demo_target_id": found_id_by_source.get(query["target_id"], ""),
+            })
+
+        self.records = seeded
+        self._persist_records()
+        self._persist_vectors()
+        DEMO_SEED_PATH.write_text(
+            f"Seeded {len(gallery)} found records and {len(queries)} synthetic lost reports.\n",
+            encoding="utf-8",
+        )
+
 
     def _persist_records(self) -> None:
         _atomic_write(RECORDS_PATH, json.dumps(self.records, ensure_ascii=False, indent=2) + "\n")
@@ -91,6 +189,7 @@ class Store:
             "pred_category": record.get("pred_category", record["category"]),
             "pred_category_label": record.get("pred_category_label", record["category_label"]),
             "pred_colour": record.get("pred_colour", record["colour"]),
+            "status": record.get("status", "available"),
         }
         if record["kind"] == "found":
             item["found_time"] = record["found_time"]
