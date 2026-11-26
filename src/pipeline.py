@@ -514,8 +514,8 @@ def save_figures(metrics: dict, figure_dir: Path) -> None:
     fig, ax = plt.subplots(figsize=(8.4, 4.4))
     bars = ax.bar([label for _, label in order], values, color=colours, width=0.72)
     ax.set_ylabel("Recall@5 (%)")
-    ax.set_ylim(0, 100)
-    ax.set_title("Held-out lost queries: correct found item inside the top 5")
+    ax.set_ylim(0, 105)
+    ax.set_title("Held-out lost queries: correct found item inside the top 5", pad=14)
     for bar, value in zip(bars, values):
         ax.text(bar.get_x() + bar.get_width() / 2, value + 1.5, f"{value:.1f}", ha="center", va="bottom", fontsize=9)
     fig.tight_layout()
@@ -539,11 +539,15 @@ def save_figures(metrics: dict, figure_dir: Path) -> None:
         ax.bar(x + (offset - 1) * width, heights, width=width, label=label, color=colour)
     ax.set_xticks(x, category_labels)
     ax.set_ylabel("Recall@5 (%)")
-    ax.set_ylim(0, 100)
+    ax.set_ylim(0, 105)
     ax.set_title("Recall@5 by item category")
-    ax.legend(frameon=False)
-    fig.tight_layout()
-    fig.savefig(figure_dir / "recall_by_category.png", dpi=150)
+    ax.legend(
+        frameon=False,
+        loc="upper left",
+        bbox_to_anchor=(1.02, 1),
+    )
+    fig.tight_layout(rect=(0, 0, 0.78, 1))
+    fig.savefig(figure_dir / "recall_by_category.png", dpi=150, bbox_inches="tight")
     plt.close(fig)
 
     coef = metrics["linear_model"]["coefficients"]
