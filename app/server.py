@@ -135,6 +135,18 @@ class Handler(BaseHTTPRequestHandler):
             if path == "/api/records/delete":
                 self._delete(body)
                 return
+            if path == "/api/claims":
+                self._json({"record": STORE.request_claim(str(body.get("found_id", "")), str(body.get("lost_id", "")), str(body.get("detail", ""))), "records": STORE.list_public()})
+                return
+            if path == "/api/claims/list":
+                self._json({"claims": STORE.list_claims(str(body.get("password", "")))})
+                return
+            if path == "/api/claims/review":
+                self._json({"record": STORE.review_claim(str(body.get("found_id", "")), body.get("approve") is True, str(body.get("password", ""))), "records": STORE.list_public()})
+                return
+            if path == "/api/records/lost-status":
+                self._json({"record": STORE.set_lost_status(str(body.get("id", "")), body.get("found") is True, str(body.get("password", ""))), "records": STORE.list_public()})
+                return
             if path == "/api/search":
                 self._search(body)
                 return
@@ -162,6 +174,7 @@ class Handler(BaseHTTPRequestHandler):
                 location=str(body.get("location", "")),
                 event_time=str(event_time),
                 note=str(body.get("note", "")),
+                contact=str(body.get("contact", "")),
                 image_path=temp,
                 clip_vector=clip_vector,
             )

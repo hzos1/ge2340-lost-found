@@ -3,8 +3,10 @@ const state = {
   filterKind: "all",
   filterCategory: "all",
   filterColour: "all",
+  filterStatus: "all",
   lostPhoto: "",
   foundPhoto: "",
+  lastLostId: "",
 };
 
 function shortName(place) {
@@ -64,9 +66,13 @@ function fillShared() {
   state.data.categories.forEach((item) => addFilter(filters, "category", item.id, item.label));
   addFilter(filters, "colour", "all", "Any colour");
   state.data.colours.forEach((name) => addFilter(filters, "colour", name, name));
+  addFilter(filters, "status", "all", "All statuses");
+  addFilter(filters, "status", "open", "Lost: not found");
+  addFilter(filters, "status", "returned", "Lost: found");
   filters.querySelector("[data-group='kind'][data-value='all']").classList.add("on");
   filters.querySelector("[data-group='category'][data-value='all']").classList.add("on");
   filters.querySelector("[data-group='colour'][data-value='all']").classList.add("on");
+  filters.querySelector("[data-group='status'][data-value='all']").classList.add("on");
 }
 
 function addFilter(container, group, value, label) {
@@ -78,9 +84,22 @@ function addFilter(container, group, value, label) {
   button.addEventListener("click", () => {
     container.querySelectorAll(`[data-group="${group}"]`).forEach((item) => item.classList.remove("on"));
     button.classList.add("on");
-    if (group === "kind") state.filterKind = value;
+    if (group === "kind") {
+      state.filterKind = value;
+      if (value !== "lost") {
+        state.filterStatus = "all";
+        container.querySelectorAll("[data-group='status']").forEach((item) => item.classList.toggle("on", item.dataset.value === "all"));
+      }
+    }
     if (group === "category") state.filterCategory = value;
     if (group === "colour") state.filterColour = value;
+    if (group === "status") {
+      state.filterStatus = value;
+      if (value !== "all") {
+        state.filterKind = "lost";
+        container.querySelectorAll("[data-group='kind']").forEach((item) => item.classList.toggle("on", item.dataset.value === "lost"));
+      }
+    }
     renderRecords();
   });
   container.append(button);
@@ -102,7 +121,8 @@ function buildForm(kind) {
     ),
     field(kind === "found" ? "Found time" : "Lost time", timeInput(`${kind}-time`), true),
     photoField(kind),
-    field("Optional note", noteInput(`${kind}-note`), true)
+    field("Optional note", noteInput(`${kind}-note`), true),
+    ...(kind === "lost" ? [field("Your contact email (visible to admin only)", contactInput(), true)] : [])
   );
   syncSwatch(kind);
   document.querySelector(`#${kind}-location`).addEventListener("change", (event) => {
@@ -155,6 +175,16 @@ function noteInput(id) {
   node.type = "text";
   node.maxLength = 400;
   node.placeholder = "Where it was left, a name tag, a case colour…";
+  return node;
+}
+
+function contactInput() {
+  const node = document.createElement("input");
+  node.id = "lost-contact";
+  node.type = "email";
+  node.required = true;
+  node.maxLength = 120;
+  node.placeholder = "name@example.com";
   return node;
 }
 
@@ -248,7 +278,7 @@ function matchBody(hit, mode) {
   rank.textContent = `#${hit.rank}`;
   const score = document.createElement("span");
   score.className = "score";
-  score.textContent = pct(hit.score);
+  score.textContent = `Ranking score: ${pct(hit.score)}`;
   header.append(rank, score);
   const title = document.createElement("p");
   title.textContent = `${hit.colour} ${hit.category_label}`;
@@ -260,6 +290,13 @@ function matchBody(hit, mode) {
   const stamp = hit.found_time ? `found ${when(hit.found_time)}` : `lost ${when(hit.lost_time)}`;
   meta.textContent = `${hit.location} · ${stamp}`;
   body.append(header, title, ident, meta);
+  if (recordCanBeClaimed(hit, mode)) {
+    const claim = document.createElement("button");
+    claim.type = "button";
+    claim.textContent = "Request to claim";
+    claim.addEventListener("click", () => onClaim(hit.id));
+    body.append(claim);
+  }
   if (hit.note) {
     const note = document.createElement("p");
     note.className = "meta";
@@ -286,6 +323,29 @@ function matchBody(hit, mode) {
     body.append(legend);
   }
   return body;
+}
+
+function recordCanBeClaimed(hit, mode) {
+  return mode === "clip" && hit.kind === "found" && state.lastLostId &&
+    state.data.records.some((record) => record.id === hit.id && record.status === "available");
+}
+
+async function onClaim(foundId, lostId = state.lastLostId) {
+  if (!lostId) {
+    lostId = window.prompt("Enter your lost report ID (for example, lost_0001).");
+    if (!lostId) return;
+  }
+  const detail = window.prompt("Describe a private detail that can help staff verify ownership (10–300 characters). Do not enter passwords or ID numbers.");
+  if (detail === null) return;
+  const response = await fetch("/api/claims", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ found_id: foundId, lost_id: lostId, detail }),
+  });
+  const payload = await response.json();
+  if (!response.ok) { alert(payload.error || "Could not submit claim."); return; }
+  state.data.records = payload.records;
+  renderRecords();
+  alert("Claim submitted. Staff can review it in Database. Do not hand over the item until ownership is verified.");
 }
 
 function part(value, color) {
@@ -317,6 +377,12 @@ function renderResults(prefix, payload) {
   }
   clip.replaceChildren(...payload.clip.map((hit) => matchCard(hit, "clip")));
   linear.replaceChildren(...payload.linear.map((hit) => matchCard(hit, "linear")));
+  if (payload.clip.length === 1) {
+    const note = document.createElement("p");
+    note.className = "meta";
+    note.textContent = "Only one candidate is available. The visual component is 0% because it is normalized across candidates, not because the photo is a mismatch.";
+    clip.prepend(note);
+  }
   if (payload.visual_source === "image") {
     const note = document.createElement("p");
     note.className = "meta";
@@ -334,6 +400,7 @@ function formPayload(kind) {
     location: document.querySelector(`#${kind}-location`).value,
     event_time: document.querySelector(`#${kind}-time`).value,
     note: document.querySelector(`#${kind}-note`).value,
+    contact: kind === "lost" ? document.querySelector("#lost-contact").value : "",
     image_base64: kind === "lost" ? state.lostPhoto : state.foundPhoto,
   };
 }
@@ -357,6 +424,7 @@ async function onSubmit(kind, event) {
     const payload = await response.json();
     if (!response.ok) throw new Error(payload.error || "Could not save that record.");
     state.data.records = payload.records;
+    if (kind === "lost") state.lastLostId = payload.record.id;
     fillHeader(payload.counts);
     renderRecords();
     notice.hidden = false;
@@ -386,7 +454,9 @@ function renderRecords() {
     const kindOk = state.filterKind === "all" || record.kind === state.filterKind;
     const categoryOk = state.filterCategory === "all" || record.category === state.filterCategory;
     const colourOk = state.filterColour === "all" || record.colour === state.filterColour;
-    return kindOk && categoryOk && colourOk;
+    const returned = record.status === "returned";
+    const statusOk = state.filterStatus === "all" || (state.filterStatus === "returned" ? returned : !returned);
+    return kindOk && categoryOk && colourOk && statusOk;
   });
   const counts = state.data.records.reduce(
     (acc, record) => {
@@ -429,10 +499,27 @@ function renderRecords() {
         const stamp = record.found_time ? when(record.found_time) : when(record.lost_time);
         meta.textContent = `${record.location} · ${stamp}`;
         body.append(badge, ident, title, meta);
+        const status = document.createElement("span");
+        status.textContent = `Status: ${record.kind === "lost" ? (record.status === "returned" ? "found" : "not yet found") : (record.status === "claim_pending" ? "claim pending" : record.status === "returned" ? "returned" : "available")}`;
+        body.append(status);
         if (record.note) {
           const note = document.createElement("span");
           note.textContent = record.note;
           body.append(note);
+        }
+        if (record.kind === "found" && record.status === "available") {
+          const claim = document.createElement("button");
+          claim.type = "button";
+          claim.textContent = "Request to claim";
+          claim.addEventListener("click", () => onClaim(record.id, ""));
+          body.append(claim);
+        }
+        if (record.kind === "lost") {
+          const toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.textContent = record.status === "returned" ? "Reopen lost report" : "Mark as found";
+          toggle.addEventListener("click", () => onLostStatus(record.id, record.status !== "returned"));
+          body.append(toggle);
         }
         const remove = document.createElement("button");
         remove.type = "button";
@@ -469,6 +556,79 @@ async function onDelete(itemId) {
   renderRecords();
 }
 
+async function onLostStatus(itemId, found) {
+  const password = document.querySelector("#admin-password").value;
+  if (!password) { alert("Enter the admin password first."); return; }
+  const notice = document.querySelector("#status-notice");
+  notice.hidden = false;
+  notice.textContent = `Updating ${itemId}...`;
+  try {
+    const response = await fetch("/api/records/lost-status", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: itemId, found, password }),
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(response.status === 404
+        ? "The server is still running an older version. Stop it with Ctrl+C, run python3 app/server.py again, then refresh this page."
+        : payload.error || `Could not update status (HTTP ${response.status}).`);
+    }
+    state.data.records = payload.records;
+    state.filterKind = "lost";
+    state.filterStatus = found ? "returned" : "open";
+    const filters = document.querySelector("#filters");
+    filters.querySelectorAll("[data-group='kind']").forEach((item) => item.classList.toggle("on", item.dataset.value === "lost"));
+    filters.querySelectorAll("[data-group='status']").forEach((item) => item.classList.toggle("on", item.dataset.value === state.filterStatus));
+    renderRecords();
+    notice.textContent = `${itemId} ${found ? "marked as found" : "reopened"}.`;
+  } catch (error) {
+    notice.textContent = error.message || "Could not update status. Check that the server is running.";
+  }
+}
+
+async function loadClaims() {
+  const password = document.querySelector("#admin-password").value;
+  if (!password) { alert("Enter the admin password first."); return; }
+  const response = await fetch("/api/claims/list", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ password }),
+  });
+  const payload = await response.json();
+  if (!response.ok) { alert(payload.error || "Could not load claims."); return; }
+  const list = document.querySelector("#claims-list");
+  list.replaceChildren();
+  if (!payload.claims.length) { list.textContent = "No pending claims."; return; }
+  payload.claims.forEach((claim) => {
+    const card = document.createElement("div");
+    card.className = "item";
+    const text = document.createElement("p");
+    text.textContent = `${claim.found_id} requested by ${claim.lost_id}. Private detail: ${claim.detail}. Lost reporter email: ${claim.contact || "not provided"}`;
+    card.append(text);
+    for (const [label, approve] of [["Mark returned", true], ["Reject claim", false]]) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = label;
+      button.addEventListener("click", () => reviewClaim(claim.found_id, approve));
+      card.append(button);
+    }
+    list.append(card);
+  });
+}
+
+async function reviewClaim(foundId, approve) {
+  if (approve && !window.confirm(`Confirm ownership was checked and ${foundId} was returned?`)) return;
+  const password = document.querySelector("#admin-password").value;
+  const response = await fetch("/api/claims/review", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ found_id: foundId, approve, password }),
+  });
+  const payload = await response.json();
+  if (!response.ok) { alert(payload.error || "Could not review claim."); return; }
+  state.data.records = payload.records;
+  renderRecords();
+  loadClaims();
+}
+
 document.querySelectorAll("nav button").forEach((button) => {
   button.addEventListener("click", () => {
     document.querySelectorAll("nav button").forEach((item) => item.classList.remove("active"));
@@ -482,6 +642,7 @@ document.querySelector("#lost-form").addEventListener("submit", (event) => onSub
 document.querySelector("#found-form").addEventListener("submit", (event) => onSubmit("found", event));
 document.querySelector("#lost-clear-photo").addEventListener("click", () => clearPhoto("lost"));
 document.querySelector("#found-clear-photo").addEventListener("click", () => clearPhoto("found"));
+document.querySelector("#load-claims").addEventListener("click", loadClaims);
 
 function shrink(file) {
   return new Promise((resolve, reject) => {

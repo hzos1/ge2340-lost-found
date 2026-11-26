@@ -112,6 +112,11 @@
           </label>
         </div>
         <div class="filters" id="filters"></div>
+        <p class="notice" id="status-notice" hidden aria-live="polite"></p>
+        <div class="panel" style="margin: 1rem 0; padding: 1rem">
+          <button type="button" id="load-claims">Review pending claims</button>
+          <div id="claims-list" aria-live="polite"></div>
+        </div>
         <p class="quiet" id="records-count"></p>
         <div class="inventory" id="records"></div>
       </section>
