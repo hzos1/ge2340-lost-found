@@ -8,13 +8,16 @@ Run from the project folder:
 from __future__ import annotations
 
 import json
+import sys
 from collections import Counter
 from datetime import datetime, timedelta
 from pathlib import Path
 
 import matplotlib
 
-matplotlib.use("Agg")
+# Notebooks keep the inline backend so plots can be shown. Scripts save files only.
+if "ipykernel" not in sys.modules:
+    matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -22,7 +25,13 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.preprocessing import StandardScaler
 
 from src.campus import PLACES, location_closeness, location_distance, nearest_other, time_closeness, time_difference
-from src.scoring import clip_fusion, linear_probability
+from src.scoring import (
+    HYBRID_CLIP_WEIGHT,
+    HYBRID_CNN_WEIGHT,
+    clip_fusion,
+    hybrid_match_score,
+    linear_probability,
+)
 from src.vision import (
     CATEGORIES,
     COLOURS,
@@ -217,6 +226,72 @@ def _summarise(ranks: list[int], by_category: dict[str, list[int]]) -> dict:
             summary["by_category"][category] = pack(values)
     summary["n"] = int(count if ranks else 0)
     return summary
+
+
+def evaluate_found_to_lost(
+    found_records: list[dict],
+    lost_queries: list[dict],
+    clip_by_id: dict[str, np.ndarray],
+    text_lookup: dict[str, np.ndarray],
+    weights: tuple[float, float, float],
+    coefficients: np.ndarray,
+    bias: float,
+) -> dict:
+    """Evaluate found-photo queries ranking synthetic lost reports, matching the app's found-item flow."""
+    ranks_by_method = {"clip_fusion": [], "cnn_linear": [], "hybrid_50_50": []}
+    by_category = {name: {} for name in ranks_by_method}
+    target_query = {query["target_id"]: index for index, query in enumerate(lost_queries)}
+
+    for found in found_records:
+        visual = np.array(
+            [
+                float(clip_by_id[found["id"]] @ text_lookup[f"{query['colour']}|{query['category']}"])
+                for query in lost_queries
+            ],
+            dtype=np.float32,
+        )
+        location_far = np.array(
+            [location_distance(found["location"], query["location"]) for query in lost_queries],
+            dtype=np.float32,
+        )
+        location_close = 1.0 - location_far
+        found_time = datetime.fromisoformat(found["found_time"])
+        time_far = np.array(
+            [time_difference(datetime.fromisoformat(query["lost_time"]), found_time) for query in lost_queries],
+            dtype=np.float32,
+        )
+        time_close = 1.0 - time_far
+        clip_scores, _ = clip_fusion(visual, location_close, time_close, weights)
+        category_match = np.array(
+            [1.0 if query["category"] == found["category"] else 0.0 for query in lost_queries],
+            dtype=np.float32,
+        )
+        colour_match = np.array(
+            [1.0 if query["colour"] == found["colour"] else 0.0 for query in lost_queries],
+            dtype=np.float32,
+        )
+        features = np.stack([category_match, colour_match, location_far, time_far], axis=1)
+        cnn_scores = linear_probability(features, coefficients, bias)
+        scores_by_method = {
+            "clip_fusion": clip_scores,
+            "cnn_linear": cnn_scores,
+            "hybrid_50_50": hybrid_match_score(clip_scores, cnn_scores),
+        }
+        target_index = target_query[found["id"]]
+        for method, scores in scores_by_method.items():
+            order = np.argsort(-scores, kind="mergesort")
+            rank = int(np.where(order == target_index)[0][0]) + 1
+            ranks_by_method[method].append(rank)
+            by_category[method].setdefault(found["category"], []).append(rank)
+
+    return {
+        "n_queries": len(found_records),
+        "gallery_size": len(lost_queries),
+        "methods": {
+            method: _summarise(ranks, by_category[method])
+            for method, ranks in ranks_by_method.items()
+        },
+    }
 
 
 def random_summary(query_count: int, gallery_size: int, by_category_counts: dict[str, int]) -> dict:
@@ -417,6 +492,8 @@ def write_findings(metrics: dict) -> list[str]:
     clip = methods["clip_fusion"]
     visual = methods["clip_visual"]
     linear = methods["cnn_linear"]
+    hybrid = methods["hybrid_50_50"]
+    reverse = metrics["test_found_to_lost"]["methods"]
     oracle = methods["metadata_oracle"]
     random_rank = methods["random"]
     weights = metrics["fusion_weights"]
@@ -429,9 +506,10 @@ def write_findings(metrics: dict) -> list[str]:
             "as successful when the correct record appears in the top 5."
         ),
         (
-            f"CLIP with location and time reaches Recall@5 of {clip['recall_at_5']:.1%} "
-            f"(MRR {clip['mrr']:.3f}). CLIP visual similarity alone reaches {visual['recall_at_5']:.1%}. "
-            f"The CNN plus linear classifier reaches {linear['recall_at_5']:.1%}. "
+            f"The 50/50 CLIP + CNN hybrid reaches Recall@5 of {hybrid['recall_at_5']:.1%} "
+            f"(MRR {hybrid['mrr']:.3f}). CLIP with place and time reaches {clip['recall_at_5']:.1%}; "
+            f"CNN plus linear reaches {linear['recall_at_5']:.1%}. "
+            f"CLIP visual similarity alone reaches {visual['recall_at_5']:.1%}. "
             f"Random ranking reaches {random_rank['recall_at_5']:.1%}. "
             f"An oracle that already knows the true category and colour reaches {oracle['recall_at_5']:.1%}."
         ),
@@ -449,17 +527,23 @@ def write_findings(metrics: dict) -> list[str]:
             "Location and time still help when several photos share a colour and a category, but the weight search "
             "kept most of the weight on the image-text similarity."
         )
-    if clip["recall_at_5"] >= linear["recall_at_5"]:
+    strongest = max((("CLIP", clip), ("CNN", linear), ("50/50 hybrid", hybrid)), key=lambda item: item[1]["recall_at_5"])
+    if strongest[0] == "50/50 hybrid":
         lines.append(
-            "CLIP is the stronger matcher here. It can compare a colour-and-category phrase with a photo directly, "
-            "so it still works when the CNN colour head is unsure. The linear model is easier to explain: its four inputs "
-            "are a category agreement, a colour agreement, a location distance, and a time gap."
+            "The 50/50 hybrid is the strongest matcher on this split. Its score averages the CLIP fused score and "
+            "the CNN binary logistic-regression probability."
         )
     else:
-        lines.append(
-            "The CNN plus linear classifier is ahead of CLIP on this split. Once the photo is reduced to category and colour, "
-            "the learned weights can lean on place and time. That decision is easy to explain, and it can only use the colour names seen in training."
-        )
+        lines.append(f"{strongest[0]} is the strongest individual or combined matcher on this split by Recall@5.")
+    reverse_best = max(
+        (("CLIP + place + time", reverse["clip_fusion"]), ("CNN + linear", reverse["cnn_linear"]), ("50/50 hybrid", reverse["hybrid_50_50"])),
+        key=lambda item: item[1]["recall_at_5"],
+    )
+    lines.append(
+        f"For the website's found-photo-to-lost-report direction, the 50/50 hybrid reaches Recall@5 of "
+        f"{reverse['hybrid_50_50']['recall_at_5']:.1%}; {reverse_best[0]} is highest at "
+        f"{reverse_best[1]['recall_at_5']:.1%} on this held-out set."
+    )
     coef_bits = []
     descriptions = {
         "category_match": "category agreement",
@@ -486,11 +570,22 @@ def write_findings(metrics: dict) -> list[str]:
     return lines
 
 
+def _chart_font() -> str:
+    from matplotlib import font_manager
+
+    installed = {font.name for font in font_manager.fontManager.ttflist}
+    for name in ("Helvetica Neue", "PingFang HK", "Arial", "Helvetica", "DejaVu Sans"):
+        if name in installed:
+            return name
+    return "DejaVu Sans"
+
+
 def save_figures(metrics: dict, figure_dir: Path) -> None:
     figure_dir.mkdir(parents=True, exist_ok=True)
+    plt.close("all")
     plt.rcParams.update(
         {
-            "font.family": "Segoe UI",
+            "font.family": _chart_font(),
             "axes.spines.top": False,
             "axes.spines.right": False,
             "axes.edgecolor": "#1c2430",
@@ -508,8 +603,9 @@ def save_figures(metrics: dict, figure_dir: Path) -> None:
         ("clip_visual", "CLIP visual"),
         ("clip_fusion", "CLIP + place + time"),
         ("cnn_linear", "CNN + linear"),
+        ("hybrid_50_50", "Hybrid 50/50"),
     ]
-    colours = ["#8d8478", "#d08a45", "#1f6f78", "#0f3d3e", "#b6402a"]
+    colours = ["#8d8478", "#d08a45", "#1f6f78", "#0f3d3e", "#b6402a", "#6d5bd0"]
     values = [metrics["test"]["methods"][key]["recall_at_5"] * 100 for key, _ in order]
     fig, ax = plt.subplots(figsize=(8.4, 4.4))
     bars = ax.bar([label for _, label in order], values, color=colours, width=0.72)
@@ -522,6 +618,25 @@ def save_figures(metrics: dict, figure_dir: Path) -> None:
     fig.savefig(figure_dir / "recall_at_5.png", dpi=150)
     plt.close(fig)
 
+    reverse_methods = metrics.get("test_found_to_lost", {}).get("methods", {})
+    if reverse_methods:
+        reverse_order = [
+            ("clip_fusion", "CLIP + place + time", "#0f3d3e"),
+            ("cnn_linear", "CNN + linear", "#b6402a"),
+            ("hybrid_50_50", "Hybrid 50/50", "#6d5bd0"),
+        ]
+        fig, ax = plt.subplots(figsize=(7.2, 4.2))
+        values = [reverse_methods[key]["recall_at_5"] * 100 for key, _, _ in reverse_order]
+        bars = ax.bar([label for _, label, _ in reverse_order], values, color=[colour for _, _, colour in reverse_order], width=0.65)
+        ax.set_ylabel("Recall@5 (%)")
+        ax.set_ylim(0, 105)
+        ax.set_title("Found-item photos: correct lost report inside the top 5", pad=14)
+        for bar, value in zip(bars, values):
+            ax.text(bar.get_x() + bar.get_width() / 2, value + 1.5, f"{value:.1f}", ha="center", va="bottom", fontsize=10)
+        fig.tight_layout()
+        fig.savefig(figure_dir / "recall_at_5_found_to_lost.png", dpi=150)
+        plt.close(fig)
+
     fig, ax = plt.subplots(figsize=(10.2, 4.6))
     category_labels = [DISPLAY_CATEGORY[category].title() for category in CATEGORIES]
     x = np.arange(len(CATEGORIES))
@@ -529,14 +644,16 @@ def save_figures(metrics: dict, figure_dir: Path) -> None:
     series = [
         ("clip_fusion", "CLIP + place + time", "#0f3d3e"),
         ("cnn_linear", "CNN + linear", "#b6402a"),
+        ("hybrid_50_50", "Hybrid 50/50", "#6d5bd0"),
         ("metadata_oracle", "True attributes", "#d08a45"),
     ]
+    width = 0.19
     for offset, (key, label, colour) in enumerate(series):
         heights = [
             metrics["test"]["methods"][key]["by_category"][category]["recall_at_5"] * 100
             for category in CATEGORIES
         ]
-        ax.bar(x + (offset - 1) * width, heights, width=width, label=label, color=colour)
+        ax.bar(x + (offset - (len(series) - 1) / 2) * width, heights, width=width, label=label, color=colour)
     ax.set_xticks(x, category_labels)
     ax.set_ylabel("Recall@5 (%)")
     ax.set_ylim(0, 105)
@@ -616,8 +733,17 @@ def print_table(metrics: dict) -> None:
         f"colour {test_cls['colour_accuracy']*100:.1f}%",
         flush=True,
     )
+    print("Hybrid weights", metrics["hybrid_weights"], flush=True)
     print("Fusion weights", metrics["fusion_weights"], flush=True)
     print("Linear weights", metrics["linear_model"], flush=True)
+    reverse = metrics["test_found_to_lost"]
+    print("\nFound-photo to lost-report retrieval", flush=True)
+    for name, summary in reverse["methods"].items():
+        print(
+            f"{name:<22}{summary['recall_at_1']*100:7.1f}%{summary['recall_at_5']*100:7.1f}%"
+            f"{summary['mrr']:8.3f}{summary['median_rank']:8.1f}",
+            flush=True,
+        )
 
 
 def main() -> None:
@@ -694,6 +820,9 @@ def main() -> None:
         )
         return linear_probability(features, coefficients, bias)
 
+    def hybrid_scores(query):
+        return hybrid_match_score(clip_fused_scores(query), linear_scores(query))
+
     print("Evaluating...", flush=True)
     splits = {"val": val_queries, "test": test_queries}
     methods = {}
@@ -708,8 +837,21 @@ def main() -> None:
                 "clip_visual": evaluate(queries, gallery, clip_visual_scores),
                 "clip_fusion": evaluate(queries, gallery, clip_fused_scores),
                 "cnn_linear": evaluate(queries, gallery, linear_scores),
+                "hybrid_50_50": evaluate(queries, gallery, hybrid_scores),
             },
         }
+
+    clip_by_id = {record["id"]: vector for record, vector in zip(gallery, clip_images)}
+    test_found_records = [record for record in gallery if record["split"] == "test"]
+    test_found_to_lost = evaluate_found_to_lost(
+        test_found_records,
+        test_queries,
+        clip_by_id,
+        text_lookup,
+        weights,
+        coefficients,
+        bias,
+    )
 
     classification = classification_report(
         scaler,
@@ -726,8 +868,8 @@ def main() -> None:
     successes = []
     misses = []
     for query in test_queries:
-        scores = clip_fused_scores(query)
-        case = top_case(query, gallery, scores, "clip_fusion")
+        scores = hybrid_scores(query)
+        case = top_case(query, gallery, scores, "hybrid_50_50")
         if case["hit_at_5"]:
             successes.append(case)
         else:
@@ -771,8 +913,9 @@ def main() -> None:
             "clip": clip.name,
             "cnn": cnn.name,
             "heads": "Multinomial logistic regression (softmax) on frozen CNN features",
-            "matcher": "Logistic regression on category match, colour match, location distance, and time difference",
+            "matcher": "50/50 average of CLIP fused similarity and CNN pair-match probability",
         },
+        "hybrid_weights": {"clip": HYBRID_CLIP_WEIGHT, "cnn": HYBRID_CNN_WEIGHT},
         "fusion_weights": {"visual": weights[0], "location": weights[1], "time": weights[2]},
         "weight_search": trials,
         "linear_model": {
@@ -787,6 +930,7 @@ def main() -> None:
         "classification": classification,
         "val": methods["val"],
         "test": methods["test"],
+        "test_found_to_lost": test_found_to_lost,
         "cases": cases,
         "examples": [
             {

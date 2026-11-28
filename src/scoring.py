@@ -8,6 +8,9 @@ from __future__ import annotations
 
 import numpy as np
 
+HYBRID_CLIP_WEIGHT = 0.5
+HYBRID_CNN_WEIGHT = 0.5
+
 
 def minmax(values: np.ndarray) -> np.ndarray:
     array = np.asarray(values, dtype=np.float32)
@@ -42,3 +45,10 @@ def sigmoid(values: np.ndarray) -> np.ndarray:
 def linear_probability(features: np.ndarray, coefficients: np.ndarray, bias: float) -> np.ndarray:
     logits = bias + np.asarray(features, dtype=np.float32) @ np.asarray(coefficients, dtype=np.float32)
     return sigmoid(logits)
+
+
+def hybrid_match_score(clip_scores: np.ndarray, cnn_scores: np.ndarray) -> np.ndarray:
+    """Combine the CLIP and CNN matcher scores with equal weight."""
+    clip_values = np.asarray(clip_scores, dtype=np.float32)
+    cnn_values = np.asarray(cnn_scores, dtype=np.float32)
+    return (HYBRID_CLIP_WEIGHT * clip_values + HYBRID_CNN_WEIGHT * cnn_values).astype(np.float32)

@@ -10,7 +10,13 @@ from pathlib import Path
 import numpy as np
 
 from src.campus import location_closeness, location_distance, time_closeness, time_difference
-from src.scoring import clip_fusion, linear_probability
+from src.scoring import (
+    HYBRID_CLIP_WEIGHT,
+    HYBRID_CNN_WEIGHT,
+    clip_fusion,
+    hybrid_match_score,
+    linear_probability,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 ART = ROOT / "artifacts"
@@ -122,6 +128,8 @@ def _empty(visual_source: str, against: str) -> dict:
         "against": against,
         "message": "No records to match yet. Upload a found item first." if against == "found" else "No lost reports to match yet.",
         "weights": {"visual": weights[0], "location": weights[1], "time": weights[2]},
+        "hybrid_weights": {"clip": HYBRID_CLIP_WEIGHT, "cnn": HYBRID_CNN_WEIGHT},
+        "hybrid": [],
         "clip": [],
         "linear": [],
     }
@@ -246,11 +254,23 @@ def _rank(
     )
     features = np.stack([category_match, colour_match, location_far, time_far], axis=1)
     probability = linear_probability(features, model.coefficients, model.bias)
+    hybrid = hybrid_match_score(fused, probability)
     weights = model.weights
     return {
         "visual_source": visual_source,
         "against": against,
         "weights": {"visual": weights[0], "location": weights[1], "time": weights[2]},
+        "hybrid_weights": {"clip": HYBRID_CLIP_WEIGHT, "cnn": HYBRID_CNN_WEIGHT},
+        "hybrid": _top(
+            gallery,
+            hybrid,
+            {
+                "clip_part": HYBRID_CLIP_WEIGHT * fused,
+                "cnn_part": HYBRID_CNN_WEIGHT * probability,
+                "clip_score": fused,
+                "cnn_score": probability,
+            },
+        ),
         "clip": _top(
             gallery,
             fused,

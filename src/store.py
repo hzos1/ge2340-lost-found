@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import hmac
 import json
+import os
 import shutil
 import threading
 from datetime import datetime
@@ -88,7 +89,13 @@ class Store:
             photo_source = art / "thumbs" / f"{source_id}.jpg"
             has_photo = photo_source.is_file()
             if has_photo:
-                shutil.copyfile(photo_source, PHOTOS / f"{item_id}.jpg")
+                photo_dest = PHOTOS / f"{item_id}.jpg"
+                if not photo_dest.is_file() or photo_dest.stat().st_size != photo_source.stat().st_size:
+                    photo_dest.unlink(missing_ok=True)
+                    try:
+                        os.link(photo_source, photo_dest)
+                    except OSError:
+                        shutil.copyfile(photo_source, photo_dest)
             seeded.append({
                 "id": item_id,
                 "kind": "found",
