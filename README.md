@@ -1,6 +1,6 @@
 # GE2340 Group 26 · Lost-and-Found Image/Text Matcher
 
-CityUHK campus matcher for lost and found reports. CLIP (ViT-B/32, no fine-tuning) is the preferred method from the proposal. A frozen MobileNetV3 + linear pair classifier is the comparison method.
+
 
 The web app stores records locally in `app/data/`. On its first run, it imports the held-out test gallery and synthetic test queries as clearly labelled demo records (298 found items and 149 lost reports). New uploads are saved in the same database and ranked with the trained matcher; uploads do not retrain the model.
 
